@@ -832,6 +832,20 @@ section[id],footer[id]{scroll-margin-top:72px}
       return '<figure class="shot reveal in"><img src="'+esc(img)+'" alt="'+esc(g.caption||'Работа')+'" loading="lazy" referrerpolicy="no-referrer">'+(g.caption?'<figcaption>'+esc(g.caption)+'</figcaption>':'')+'</figure>';}).join('');
   }).catch(function(){});
 
+
+  // Счётчик посещений (abacus) — свои заходы владельца не считаются
+  (function(){
+    var NS='polymer3dlab-mrz', API='https://abacus.jasoncameron.dev/hit/'+NS+'/';
+    var ls=null;try{ls=window.localStorage;}catch(e){}
+    if(ls&&ls.getItem('polymer_owner')==='1')return;
+    if(/bot|crawl|spider|yandex|google|bing/i.test(navigator.userAgent))return;
+    var d=new Date(Date.now()+3*3600*1000).toISOString().slice(0,10).replace(/-/g,'');
+    function hit(k){try{fetch(API+k,{mode:'cors',keepalive:true}).catch(function(){});}catch(e){}}
+    hit('views');hit('views-'+d);
+    var seen=ls&&ls.getItem('polymer_seen_day');
+    if(seen!==d){hit('uniq');hit('uniq-'+d);if(ls)try{ls.setItem('polymer_seen_day',d);}catch(e){}}
+  })();
+
   // Подсветка текущего раздела в меню
   var links = document.querySelectorAll('.nav a');
   var map = {};

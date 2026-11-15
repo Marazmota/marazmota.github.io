@@ -63,6 +63,17 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
 .steps-box ol{margin:8px 0 0;padding-left:20px;color:var(--muted)}
 .steps-box li{margin:4px 0}
 .steps-box b{color:var(--text)}
+.stats-grid{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:760px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.stat b{display:block;font-size:34px;line-height:1.1;color:var(--accent);font-weight:800}
+.stat span{display:block;color:var(--muted);font-size:13px;margin-top:6px}
+.stat small{display:block;color:var(--text);font-size:13px;margin-top:2px}
+.chart{display:flex;align-items:flex-end;gap:6px;height:170px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 12px 30px;position:relative}
+.bar-c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative}
+.bar-c i{display:block;width:100%;max-width:28px;background:var(--accent);border-radius:5px 5px 2px 2px;min-height:2px}
+.bar-c em{font-style:normal;font-size:11px;color:var(--text);margin-bottom:3px}
+.bar-c span{position:absolute;bottom:-22px;font-size:10px;color:var(--muted);white-space:nowrap}
 #pubDialog textarea{min-height:140px;font:12px/1.4 ui-monospace,Consolas,monospace}
 </style>
 </head>
@@ -76,6 +87,7 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
   <div class="tabs">
     <button class="btn active" data-tab="products">Товары</button>
     <button class="btn" data-tab="gallery">Галерея</button>
+    <button class="btn" data-tab="stats">Посещения</button>
   </div>
 
   <div id="tab-products">
@@ -100,6 +112,15 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
     </div>
     <p class="help" id="gDirty"></p>
     <div class="list" id="gList"></div>
+  </div>
+
+
+  <div id="tab-stats" hidden>
+    <div class="bar"><h2>Посещения сайта</h2><button class="btn" id="statsReload">Обновить</button></div>
+    <div class="stats-grid" id="statsGrid"><p class="help">Загружаю…</p></div>
+    <h3 style="margin:26px 0 10px;font-size:16px">Последние 14 дней</h3>
+    <div class="chart" id="statsChart"></div>
+    <p class="help" style="margin-top:16px">Посетители — разные люди за день, просмотры — все открытия страницы. Твои заходы с этого браузера не считаются. Поисковые роботы тоже не считаются.</p>
   </div>
 
   <details class="steps-box" style="margin-top:28px">
@@ -366,11 +387,38 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
     loadFromSite();
   });
 
+
+  // ---------- посещения ----------
+  try{localStorage.setItem('polymer_owner','1');}catch(e){}
+  var NS='polymer3dlab-mrz', GET='https://abacus.jasoncameron.dev/get/'+NS+'/';
+  function getCount(k){var c=new AbortController();setTimeout(function(){c.abort();},8000);
+    return fetch(GET+k,{signal:c.signal}).then(function(r){return r.ok?r.json():{value:0};}).then(function(j){return +j.value||0;}).catch(function(){return null;});}
+  function dayKey(off){var t=new Date(Date.now()+3*3600*1000-off*86400000);return {k:t.toISOString().slice(0,10).replace(/-/g,''),label:t.toISOString().slice(8,10)+'.'+t.toISOString().slice(5,7)};}
+  var statsLoaded=false;
+  function loadStats(){
+    $('statsGrid').innerHTML='<p class="help">Загружаю…</p>';
+    var days=[];for(var i=13;i>=0;i--)days.push(dayKey(i));
+    var reqs=[getCount('uniq'),getCount('views')];
+    days.forEach(function(d){reqs.push(getCount('uniq-'+d.k));reqs.push(getCount('views-'+d.k));});
+    Promise.all(reqs).then(function(r){
+      if(r.every(function(x){return x===null;})){$('statsGrid').innerHTML='<p class="help">Сервис статистики не отвечает. Попробуй позже.</p>';$('statsChart').innerHTML='';return;}
+      var n=function(x){return x||0;};
+      var u=[],v=[];for(var i=0;i<days.length;i++){u.push(n(r[2+i*2]));v.push(n(r[3+i*2]));}
+      var sum=function(a,from){return a.slice(from).reduce(function(s,x){return s+x;},0);};
+      var cards=[['Сегодня',u[13],v[13]],['Вчера',u[12],v[12]],['7 дней',sum(u,7),sum(v,7)],['Всего',n(r[0]),n(r[1])]];
+      $('statsGrid').innerHTML=cards.map(function(c){return '<div class="stat"><span>'+c[0]+'</span><b>'+c[1]+'</b><small>посетителей · '+c[2]+' просмотров</small></div>';}).join('');
+      var max=Math.max.apply(null,u.concat([1]));
+      $('statsChart').innerHTML=days.map(function(d,i){var h=Math.round(u[i]/max*100);return '<div class="bar-c" title="'+d.label+': '+u[i]+' посетителей, '+v[i]+' просмотров"><em>'+(u[i]||'')+'</em><i style="height:'+h+'%"></i><span>'+d.label+'</span></div>';}).join('');
+      statsLoaded=true;
+    });
+  }
+  $('statsReload').addEventListener('click',loadStats);
+
   // ---------- вкладки ----------
   [].forEach.call(document.querySelectorAll('.tabs button'),function(b){
     b.addEventListener('click',function(){
       [].forEach.call(document.querySelectorAll('.tabs button'),function(x){x.classList.toggle('active',x===b);});
-      $('tab-products').hidden=b.dataset.tab!=='products';$('tab-gallery').hidden=b.dataset.tab!=='gallery';
+      $('tab-products').hidden=b.dataset.tab!=='products';$('tab-gallery').hidden=b.dataset.tab!=='gallery';$('tab-stats').hidden=b.dataset.tab!=='stats';if(b.dataset.tab==='stats'&&!statsLoaded)loadStats();
     });
   });
 
