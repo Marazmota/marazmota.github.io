@@ -381,6 +381,43 @@ section[id],footer[id]{scroll-margin-top:72px}
   .steps{grid-template-columns:repeat(4,1fr);gap:16px}
   .service h3{font-size:20px}
 }
+/* ===== Компактная раскладка ===== */
+.section{padding:52px 0}
+.section-head{margin-bottom:24px}
+.hero{padding:40px 0 48px}
+.order{display:grid;gap:16px;align-items:start}
+.order .price-note{margin-top:12px}
+.order .steps{grid-template-columns:1fr!important;gap:10px}
+.order .step{flex-direction:row;align-items:flex-start;gap:16px;padding:16px 20px}
+.order .step-line{display:none}
+.order .step-num{font-size:22px;min-width:38px;padding-top:2px}
+.order .step h3{font-size:16.5px}
+.order .step p{font-size:15px;margin-top:2px}
+.safety{display:flex;gap:12px;align-items:flex-start;margin-top:12px;padding:14px 18px;border:1px solid var(--line-strong);border-left:4px solid var(--accent);border-radius:14px;background:var(--card);color:var(--muted);font-size:15px}
+.safety svg{width:22px;height:22px;flex:none;color:var(--accent);margin-top:1px}
+.safety strong{color:var(--text)}
+.gallery{grid-template-columns:repeat(2,1fr)}
+.gallery .shot:first-child{grid-column:span 2}
+.gallery .shot:first-child{aspect-ratio:2/1.1}
+@media (min-width:768px){
+  .section{padding:72px 0}
+  .gallery{grid-template-columns:repeat(4,1fr);grid-auto-flow:dense}
+  .gallery .shot:first-child{grid-column:span 2;grid-row:span 2;aspect-ratio:1/1}
+}
+@media (min-width:960px){
+  .hero{padding:72px 0 80px}
+  .order{grid-template-columns:1.05fr 1fr;gap:24px}
+}
+@media (max-width:559px){
+  .service{display:grid;grid-template-columns:44px 1fr;column-gap:14px;row-gap:4px;padding:18px}
+  .service-top{grid-row:1 / span 3;align-self:start}
+  .service-top .icon{width:44px;height:44px}
+  .service-num{display:none}
+  .service h3{font-size:17px}
+  .service p{font-size:14.5px}
+  .service .tag{grid-column:2;margin-top:6px}
+  .services{gap:10px}
+}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -423,10 +460,10 @@ section[id],footer[id]{scroll-margin-top:72px}
       <span class="logo-text"><span class="logo-name">POLYMER</span><span class="logo-sub">3D LAB</span></span>
     </a>
     <nav class="nav" aria-label="Основное меню">
-      <a href="#services">Услуги</a>
       <a href="#shop">Товары</a>
+      <a href="#services">Услуги</a>
+      <a href="#gallery">Работы</a>
       <a href="#prices">Цены</a>
-      <a href="#how">Как заказать</a>
       <a href="#contacts">Контакты</a>
     </nav>
     <a class="btn btn-accent btn-sm header-tg" href="https://t.me/polymer_3d_lab" target="_blank" rel="noopener">
@@ -435,10 +472,10 @@ section[id],footer[id]{scroll-margin-top:72px}
     <button class="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileMenu"><span></span></button>
   </div>
   <nav class="mobile-menu" id="mobileMenu" aria-label="Меню">
-    <a href="#services">Услуги</a>
     <a href="#shop">Товары</a>
+    <a href="#services">Услуги</a>
+    <a href="#gallery">Работы</a>
     <a href="#prices">Цены</a>
-    <a href="#how">Как заказать</a>
     <a href="#contacts">Контакты</a>
   </nav>
 </header>
@@ -491,57 +528,11 @@ section[id],footer[id]{scroll-margin-top:72px}
   </div>
 </section>
 
-<!-- ===== 3. Что делаю ===== -->
-<section class="section" id="services">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>01 · Услуги</p>
-      <h2>Что делаю</h2>
-    </div>
-    <div class="services">
-      <article class="card service reveal">
-        <div class="service-top"><div class="icon"><svg aria-hidden="true"><use href="#i-gear"/></svg></div><span class="service-num">01</span></div>
-        <h3>Бытовая техника</h3>
-        <p>Шестерни для мясорубок и миксеров, ручки, крышки, колёсики</p>
-      </article>
-      <article class="card service reveal">
-        <div class="service-top"><div class="icon"><svg aria-hidden="true"><use href="#i-car"/></svg></div><span class="service-num">02</span></div>
-        <h3>Авто</h3>
-        <p>Заглушки, клипсы, кнопки, подстаканники, проставки под динамики 16,5&nbsp;см</p>
-      </article>
-      <article class="card service reveal">
-        <div class="service-top"><div class="icon"><svg aria-hidden="true"><use href="#i-chair"/></svg></div><span class="service-num">03</span></div>
-        <h3>Мебель</h3>
-        <p>Заглушки, уголки, ролики, фурнитура</p>
-      </article>
-      <article class="card service reveal">
-        <div class="service-top"><div class="icon"><svg aria-hidden="true"><use href="#i-cube"/></svg></div><span class="service-num">04</span></div>
-        <h3>3D-моделирование</h3>
-        <p>По образцу или чертежу, файлы STL/STEP, чертежи по ЕСКД (Компас&nbsp;3D, Inventor)</p>
-      </article>
-      <article class="card service reveal">
-        <div class="service-top"><div class="icon"><svg aria-hidden="true"><use href="#i-ball"/></svg></div><span class="service-num">05</span></div>
-        <h3>Сувениры с логотипом</h3>
-        <p>Брелоки, ёлочные игрушки</p>
-        <span class="tag">партии от 20 шт</span>
-      </article>
-      <article class="card service reveal">
-        <div class="service-top"><div class="icon"><svg aria-hidden="true"><use href="#i-stack"/></svg></div><span class="service-num">06</span></div>
-        <h3>Партии и серийное производство</h3>
-        <p>Для ИП и компаний</p>
-        <span class="tag">от 10 шт</span>
-      </article>
-    </div>
-  </div>
-</section>
-
-<div class="wrap"><hr class="layer-rule"></div>
-
 <!-- ===== Товары ===== -->
 <section class="section" id="shop">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>Готовые изделия</p>
+      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>01 · Товары</p>
       <h2>Товары в наличии</h2>
       <p>То, что уже напечатано и продаётся на Авито. Можно купить с Авито Доставкой или забрать лично в Набережных Челнах.</p>
     </div>
@@ -587,13 +578,72 @@ section[id],footer[id]{scroll-margin-top:72px}
   </div>
 </section>
 
-<div class="wrap"><hr class="layer-rule"></div>
+<!-- ===== 3. Что делаю ===== -->
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>02 · Услуги</p>
+      <h2>Что делаю</h2>
+    </div>
+    <div class="services">
+      <article class="card service reveal">
+        <div class="service-top"><div class="icon"><svg aria-hidden="true"><use href="#i-gear"/></svg></div><span class="service-num">01</span></div>
+        <h3>Бытовая техника</h3>
+        <p>Шестерни для мясорубок и миксеров, ручки, крышки, колёсики</p>
+      </article>
+      <article class="card service reveal">
+        <div class="service-top"><div class="icon"><svg aria-hidden="true"><use href="#i-car"/></svg></div><span class="service-num">02</span></div>
+        <h3>Авто</h3>
+        <p>Заглушки, клипсы, кнопки, подстаканники, проставки под динамики 16,5&nbsp;см</p>
+      </article>
+      <article class="card service reveal">
+        <div class="service-top"><div class="icon"><svg aria-hidden="true"><use href="#i-chair"/></svg></div><span class="service-num">03</span></div>
+        <h3>Мебель</h3>
+        <p>Заглушки, уголки, ролики, фурнитура</p>
+      </article>
+      <article class="card service reveal">
+        <div class="service-top"><div class="icon"><svg aria-hidden="true"><use href="#i-cube"/></svg></div><span class="service-num">04</span></div>
+        <h3>3D-моделирование</h3>
+        <p>По образцу или чертежу, файлы STL/STEP, чертежи по ЕСКД (Компас&nbsp;3D, Inventor)</p>
+      </article>
+      <article class="card service reveal">
+        <div class="service-top"><div class="icon"><svg aria-hidden="true"><use href="#i-ball"/></svg></div><span class="service-num">05</span></div>
+        <h3>Сувениры с логотипом</h3>
+        <p>Брелоки, ёлочные игрушки</p>
+        <span class="tag">партии от 20 шт</span>
+      </article>
+      <article class="card service reveal">
+        <div class="service-top"><div class="icon"><svg aria-hidden="true"><use href="#i-stack"/></svg></div><span class="service-num">06</span></div>
+        <h3>Партии и серийное производство</h3>
+        <p>Для ИП и компаний</p>
+        <span class="tag">от 10 шт</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. Галерея ===== -->
+<section class="section" id="gallery">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>03 · Работы</p>
+      <h2>Галерея работ</h2>
+    </div>
+    <div class="gallery" id="galleryGrid">
+      <figure class="shot reveal"><img src="img/nabor.jpg" alt="Набор держателей Makita и DeWalt" loading="lazy" width="900" height="900"><figcaption>Набор держателей</figcaption></figure>
+      <figure class="shot reveal"><img src="img/makita-stena.jpg" alt="Держатель Makita 18V на стене" loading="lazy" width="900" height="900"><figcaption>Makita 18V на стене</figcaption></figure>
+      <figure class="shot reveal"><img src="img/dewalt-akkum.jpg" alt="DeWalt 12V с аккумулятором" loading="lazy" width="900" height="900"><figcaption>DeWalt 12V</figcaption></figure>
+      <figure class="shot reveal"><img src="img/makita-doska.jpg" alt="Держатель Makita 18V" loading="lazy" width="900" height="900"><figcaption>Makita 18V</figcaption></figure>
+      <figure class="shot reveal"><img src="img/dewalt-dva-cveta.jpg" alt="DeWalt 12V: натуральный и чёрный" loading="lazy" width="900" height="900"><figcaption>Два цвета</figcaption></figure>
+    </div>
+  </div>
+</section>
 
 <!-- ===== 4. Почему ко мне ===== -->
 <section class="section" id="why">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>02 · Почему ко мне</p>
+      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>04 · Преимущества</p>
       <h2>Почему ко мне</h2>
     </div>
     <div class="why">
@@ -635,14 +685,16 @@ section[id],footer[id]{scroll-margin-top:72px}
   </div>
 </section>
 
-<!-- ===== 5. Цены ===== -->
+<!-- ===== 5. Цены и заказ ===== -->
 <section class="section" id="prices">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>03 · Цены</p>
-      <h2>Цены</h2>
+      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>05 · Цены и заказ</p>
+      <h2>Сколько стоит и как заказать</h2>
     </div>
-    <div class="card price-card reveal">
+    <div class="order">
+      <div>
+        <div class="card price-card reveal">
       <table class="price-table">
         <caption class="visually-hidden">Цены на 3D-печать и моделирование</caption>
         <tbody>
@@ -653,63 +705,20 @@ section[id],footer[id]{scroll-margin-top:72px}
         </tbody>
       </table>
     </div>
-    <p class="price-note reveal">Точную цену и срок назову, когда посмотрю деталь.</p>
-  </div>
-</section>
-
-<!-- ===== 6. Как заказать ===== -->
-<section class="section" id="how">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>04 · Как заказать</p>
-      <h2>Как заказать</h2>
-    </div>
-    <ol class="steps" style="list-style:none;margin:0;padding:0">
-      <li class="card step reveal"><span class="step-num">01</span><span class="step-line"></span><h3>Напишите, что нужно</h3><p>Фото детали, размеры или файл — в Telegram или по телефону.</p></li>
-      <li class="card step reveal"><span class="step-num">02</span><span class="step-line"></span><h3>Привезите деталь</h3><p>Посмотрю и назову цену и срок.</p></li>
-      <li class="card step reveal"><span class="step-num">03</span><span class="step-line"></span><h3>Предоплата и работа</h3><p>Моделирую, подбираю пластик, печатаю.</p></li>
-      <li class="card step reveal"><span class="step-num">04</span><span class="step-line"></span><h3>Забираете</h3><p>Лично или доставкой Авито.</p></li>
+        <p class="price-note reveal">Точную цену и срок назову, когда посмотрю деталь.</p>
+      </div>
+      <div id="how">
+        <ol class="steps" style="list-style:none;margin:0;padding:0">
+      <li class="card step reveal"><span class="step-num">01</span><span class="step-line"></span><div><h3>Напишите, что нужно</h3><p>Фото детали, размеры или файл — в Telegram или по телефону.</p></div></li>
+      <li class="card step reveal"><span class="step-num">02</span><span class="step-line"></span><div><h3>Привезите деталь</h3><p>Посмотрю и назову цену и срок.</p></div></li>
+      <li class="card step reveal"><span class="step-num">03</span><span class="step-line"></span><div><h3>Предоплата и работа</h3><p>Моделирую, подбираю пластик, печатаю.</p></div></li>
+      <li class="card step reveal"><span class="step-num">04</span><span class="step-line"></span><div><h3>Забираете</h3><p>Лично или доставкой Авито.</p></div></li>
     </ol>
-  </div>
-</section>
-
-<!-- ===== 7. Галерея ===== -->
-<section class="section" id="gallery">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>05 · Работы</p>
-      <h2>Галерея работ</h2>
-    </div>
-    <!--
-      Чтобы вставить фото: замените блок <div class="shot-ph">…</div> на
-      <img src="foto-1.jpg" alt="Что на фото" loading="lazy">
-      и при желании поменяйте подпись в <figcaption>.
-    -->
-    <div class="gallery" id="galleryGrid">
-      <figure class="shot reveal"><img src="img/nabor.jpg" alt="Набор держателей Makita и DeWalt" loading="lazy" width="900" height="900"><figcaption>Набор держателей</figcaption></figure>
-      <figure class="shot reveal"><img src="img/makita-stena.jpg" alt="Держатель Makita 18V на стене" loading="lazy" width="900" height="900"><figcaption>Makita 18V на стене</figcaption></figure>
-      <figure class="shot reveal"><img src="img/dewalt-akkum.jpg" alt="DeWalt 12V с аккумулятором" loading="lazy" width="900" height="900"><figcaption>DeWalt 12V</figcaption></figure>
-      <figure class="shot reveal"><img src="img/makita-doska.jpg" alt="Держатель Makita 18V" loading="lazy" width="900" height="900"><figcaption>Makita 18V</figcaption></figure>
-      <figure class="shot reveal"><img src="img/dewalt-dva-cveta.jpg" alt="DeWalt 12V: натуральный и чёрный" loading="lazy" width="900" height="900"><figcaption>Два цвета</figcaption></figure>
-      <figure class="shot reveal"><img src="img/makita-sverhu.jpg" alt="Держатель Makita, вид сверху" loading="lazy" width="900" height="900"><figcaption>Вид сверху</figcaption></figure>
-    </div>
-  </div>
-</section>
-
-<!-- ===== 8. Важно ===== -->
-<section class="section" style="padding-top:0">
-  <div class="wrap">
-    <div class="notice reveal" role="note">
-      <div class="icon"><svg aria-hidden="true"><use href="#i-warn"/></svg></div>
-      <div>
-        <h2>Важно</h2>
-        <p>Детали, от которых зависит безопасность <strong>(тормоза, ремни, рулевое)</strong>, не делаю.</p>
+        <p class="safety reveal"><svg aria-hidden="true"><use href="#i-warn"/></svg><span>Детали, от которых зависит безопасность <strong>(тормоза, ремни, рулевое)</strong>, не делаю.</span></p>
       </div>
     </div>
   </div>
 </section>
-
-<div class="wrap"><hr class="layer-rule"></div>
 
 <!-- ===== 9. Контакты ===== -->
 <section class="section" id="contacts">
