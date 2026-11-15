@@ -4,12 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>POLYMER 3D LAB — 3D-печать и моделирование в Набережных Челнах</title>
-<meta name="description" content="3D-печать и моделирование на заказ в Набережных Челнах. Сломанные пластиковые детали по образцу, чертежу или вашему файлу: бытовая техника, авто, мебель. От 300 ₽.">
+<meta name="description" content="3D-печать и моделирование на заказ в Набережных Челнах. Сломанные пластиковые детали по образцу, чертежу или вашему файлу: бытовая техника, авто, мебель. Держатели аккумуляторов Makita и DeWalt. От 300 ₽.">
 <meta name="theme-color" content="#0E0F12">
 <meta property="og:type" content="website">
 <meta property="og:title" content="POLYMER 3D LAB — 3D-печать в Набережных Челнах">
 <meta property="og:description" content="Сломалась пластиковая деталь? Сделаю такую же. По образцу, чертежу или вашему файлу.">
 <meta property="og:locale" content="ru_RU">
+<meta property="og:url" content="https://marazmota.github.io/">
+<meta property="og:image" content="https://marazmota.github.io/img/og.jpg">
+<link rel="canonical" href="https://marazmota.github.io/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E0F12'/%3E%3Cpath d='M16 3.5 26.8 9.75v12.5L16 28.5 5.2 22.25V9.75Z' fill='none' stroke='%23C5F04A' stroke-width='2.2' stroke-linejoin='round'/%3E%3Cpath d='M10.5 12h11M9.5 16h13M10.5 20h11' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +27,9 @@
   "telephone": "+79377776390",
   "address": { "@type": "PostalAddress", "addressLocality": "Набережные Челны", "addressCountry": "RU" },
   "areaServed": "Набережные Челны",
-  "sameAs": ["https://t.me/polymer_3d_lab"]
+  "url": "https://marazmota.github.io/",
+  "image": "https://marazmota.github.io/img/og.jpg",
+  "sameAs": ["https://t.me/polymer_3d_lab", "https://www.avito.ru/naberezhnye_chelny/predlozheniya_uslug/3d_pechat_na_zakaz_8078634027"]
 }
 </script>
 
@@ -279,6 +284,19 @@ section[id],footer[id]{scroll-margin-top:72px}
   background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:5px 10px;
 }
 
+/* Товар */
+.product{display:grid;gap:24px;padding:16px}
+.product>img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:12px;align-self:start}
+.product-body{display:flex;flex-direction:column;gap:18px;padding:4px 8px 8px}
+.product-list{display:grid;gap:10px}
+.product-list li{position:relative;padding-left:22px;color:var(--muted)}
+.product-list li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.product-price b{display:block;font:800 clamp(34px,7vw,48px)/1 "Unbounded",sans-serif;color:var(--accent)}
+.product-price span{display:block;margin-top:8px;color:var(--muted)}
+.product-note{color:var(--muted);font-size:15.5px}
+.product .btn{align-self:flex-start}
+@media (min-width:768px){.product{grid-template-columns:1fr 1.1fr;gap:32px;padding:20px}.product-body{justify-content:center}}
+
 /* Важно */
 .notice{
   display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;
@@ -401,6 +419,7 @@ section[id],footer[id]{scroll-margin-top:72px}
     </a>
     <nav class="nav" aria-label="Основное меню">
       <a href="#services">Услуги</a>
+      <a href="#shop">Товары</a>
       <a href="#prices">Цены</a>
       <a href="#how">Как заказать</a>
       <a href="#contacts">Контакты</a>
@@ -412,6 +431,7 @@ section[id],footer[id]{scroll-margin-top:72px}
   </div>
   <nav class="mobile-menu" id="mobileMenu" aria-label="Меню">
     <a href="#services">Услуги</a>
+    <a href="#shop">Товары</a>
     <a href="#prices">Цены</a>
     <a href="#how">Как заказать</a>
     <a href="#contacts">Контакты</a>
@@ -506,6 +526,34 @@ section[id],footer[id]{scroll-margin-top:72px}
         <p>Для ИП и компаний</p>
         <span class="tag">от 10 шт</span>
       </article>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><hr class="layer-rule"></div>
+
+<!-- ===== Товары ===== -->
+<section class="section" id="shop">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>Готовые изделия</p>
+      <h2>Держатели аккумуляторов</h2>
+      <p>Для Makita 18V и DeWalt 12V / 20V. Крепятся на стену, верстак или стеллаж.</p>
+    </div>
+    <div class="card product reveal">
+      <img src="img/nabor.jpg" alt="Держатели аккумуляторов Makita 18V и DeWalt 12V" loading="lazy" width="900" height="900">
+      <div class="product-body">
+        <ul class="product-list">
+          <li>Makita LXT 18V — BL1815, BL1830, BL1840, BL1850, BL1860</li>
+          <li>DeWalt 12V / 10.8V — DCB127, DCB125, DCB120, DCB121</li>
+          <li>DeWalt 18V / 20V XR — под заказ</li>
+          <li>Чёрный PETG — для гаража, или натуральный PLA</li>
+          <li>Крепление на 2 самореза</li>
+        </ul>
+        <div class="product-price"><b>900 ₽</b><span>за 3 шт · от 5 шт — 270 ₽/шт</span></div>
+        <p class="product-note">Продаю от 3 штук, можно разные варианты в одном заказе. Под другой инструмент (Bosch, Metabo, Интерскол, Ryobi) — сделаю по модели аккумулятора.</p>
+        <a class="btn btn-accent" href="https://t.me/polymer_3d_lab" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-tg"/></svg>Заказать в Telegram</a>
+      </div>
     </div>
   </div>
 </section>
@@ -609,12 +657,12 @@ section[id],footer[id]{scroll-margin-top:72px}
       и при желании поменяйте подпись в <figcaption>.
     -->
     <div class="gallery">
-      <figure class="shot reveal"><div class="shot-ph"><svg aria-hidden="true"><use href="#i-photo"/></svg></div><figcaption>Фото работы</figcaption></figure>
-      <figure class="shot reveal"><div class="shot-ph"><svg aria-hidden="true"><use href="#i-photo"/></svg></div><figcaption>Фото работы</figcaption></figure>
-      <figure class="shot reveal"><div class="shot-ph"><svg aria-hidden="true"><use href="#i-photo"/></svg></div><figcaption>Фото работы</figcaption></figure>
-      <figure class="shot reveal"><div class="shot-ph"><svg aria-hidden="true"><use href="#i-photo"/></svg></div><figcaption>Фото работы</figcaption></figure>
-      <figure class="shot reveal"><div class="shot-ph"><svg aria-hidden="true"><use href="#i-photo"/></svg></div><figcaption>Фото работы</figcaption></figure>
-      <figure class="shot reveal"><div class="shot-ph"><svg aria-hidden="true"><use href="#i-photo"/></svg></div><figcaption>Фото работы</figcaption></figure>
+      <figure class="shot reveal"><img src="img/nabor.jpg" alt="Набор держателей Makita и DeWalt" loading="lazy" width="900" height="900"><figcaption>Набор держателей</figcaption></figure>
+      <figure class="shot reveal"><img src="img/makita-stena.jpg" alt="Держатель Makita 18V на стене" loading="lazy" width="900" height="900"><figcaption>Makita 18V на стене</figcaption></figure>
+      <figure class="shot reveal"><img src="img/dewalt-akkum.jpg" alt="DeWalt 12V с аккумулятором" loading="lazy" width="900" height="900"><figcaption>DeWalt 12V</figcaption></figure>
+      <figure class="shot reveal"><img src="img/makita-doska.jpg" alt="Держатель Makita 18V" loading="lazy" width="900" height="900"><figcaption>Makita 18V</figcaption></figure>
+      <figure class="shot reveal"><img src="img/dewalt-dva-cveta.jpg" alt="DeWalt 12V: натуральный и чёрный" loading="lazy" width="900" height="900"><figcaption>Два цвета</figcaption></figure>
+      <figure class="shot reveal"><img src="img/makita-sverhu.jpg" alt="Держатель Makita, вид сверху" loading="lazy" width="900" height="900"><figcaption>Вид сверху</figcaption></figure>
     </div>
   </div>
 </section>
