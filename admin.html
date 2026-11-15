@@ -185,6 +185,14 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
   function slug(s){var map={а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'c',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya'};
     return String(s||'').toLowerCase().split('').map(function(c){return map[c]!=null?map[c]:c;}).join('').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)||'item';}
 
+  // подтверждение без confirm(): первый клик — «Точно?», второй — действие
+  function armed(btn,label){
+    if(btn.dataset.armed==='1')return true;
+    btn.dataset.armed='1';var old=btn.textContent;btn.textContent=label||'Точно удалить?';btn.style.borderColor='var(--red)';
+    setTimeout(function(){if(btn.isConnected){btn.dataset.armed='';btn.textContent=old;btn.style.borderColor='';}},3500);
+    return false;
+  }
+
   // ---------- черновик ----------
   var previews={}; // путь -> dataUrl (только в этой вкладке)
   function saveDraft(){var s=store();if(!s)return;try{s.setItem(DKEY,JSON.stringify({products:state.products,gallery:state.gallery,dirtyP:state.dirtyP,dirtyG:state.dirtyG,pendingP:state.pendingP,pendingG:state.pendingG}));}catch(e){}}
@@ -293,7 +301,7 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
     if(b.dataset.act==='up')move(P,i,-1);
     if(b.dataset.act==='down')move(P,i,1);
     if(b.dataset.act==='hide')P[i].hidden=!P[i].hidden;
-    if(b.dataset.act==='del'){if(!confirm('Удалить «'+P[i].title+'»?'))return;P.splice(i,1);}
+    if(b.dataset.act==='del'){if(!armed(b))return;P.splice(i,1);}
     changed('p');
   });
 
@@ -309,7 +317,7 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
     var b=e.target.closest('button[data-gact]');if(!b)return;var i=+b.dataset.i,G=state.gallery;
     if(b.dataset.gact==='up')move(G,i,-1);
     if(b.dataset.gact==='down')move(G,i,1);
-    if(b.dataset.gact==='del'){if(!confirm('Убрать это фото из галереи?'))return;G.splice(i,1);}
+    if(b.dataset.gact==='del'){if(!armed(b))return;G.splice(i,1);}
     changed('g');
   });
 
@@ -354,7 +362,7 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
     saveDraft();render();$('pubDialog').close();say('Отлично! Сайт обновится через 1–2 минуты');
   });
   $('resetDraft').addEventListener('click',function(){
-    if((state.dirtyP||state.dirtyG)&&!confirm('Неопубликованные изменения пропадут. Загрузить заново с сайта?'))return;
+    if((state.dirtyP||state.dirtyG)&&!armed(this,'Изменения пропадут. Точно?'))return;
     loadFromSite();
   });
 
