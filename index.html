@@ -419,6 +419,33 @@ section[id],footer[id]{scroll-margin-top:72px}
   .service .tag{grid-column:2;margin-top:6px}
   .services{gap:10px}
 }
+
+/* ===== Удобство: увеличение фото, нижняя панель, вопросы ===== */
+.p-media{overflow:hidden}
+.p-media img{position:absolute;inset:0}
+.p-media img,.shot img{cursor:zoom-in}
+.zoom-hint{position:absolute;z-index:2;right:10px;bottom:10px;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(14,15,18,.7);color:#fff;pointer-events:none}
+.zoom-hint svg{width:18px;height:18px}
+.lb{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:rgba(5,6,8,.92);padding:56px 12px 24px}
+.lb.open{display:flex}
+.lb img{max-width:100%;max-height:100%;border-radius:12px;object-fit:contain;cursor:default}
+.lb-cap{position:absolute;left:0;right:0;bottom:calc(14px + env(safe-area-inset-bottom));text-align:center;color:#C9CED6;font-size:14px;padding:0 60px}
+.lb-btn{position:absolute;width:48px;height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(22,24,29,.85);color:#fff;font-size:26px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.lb-close{top:calc(10px + env(safe-area-inset-top));right:12px}
+.lb-prev{left:12px;top:50%;margin-top:-24px}.lb-next{right:12px;top:50%;margin-top:-24px}
+body.lb-lock{overflow:hidden}
+.sticky-bar{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;display:grid;grid-template-columns:1fr auto;gap:8px}
+.sticky-bar .btn{min-height:52px;font-size:17px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.sticky-bar .btn-call{width:56px;padding:0;background:var(--card);color:var(--text);border-color:var(--line-strong)}
+.faq{display:grid;gap:10px;max-width:820px}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0 20px}
+.faq details[open]{border-color:var(--line-strong)}
+.faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:60px;font-weight:700;font-size:16.5px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";flex:none;width:32px;height:32px;border-radius:10px;border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:20px;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--muted);font-size:15.5px;padding:0 0 18px}
+@media (min-width:768px){.sticky-bar{display:none}}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -448,6 +475,7 @@ section[id],footer[id]{scroll-margin-top:72px}
     <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="9.8" r="2.3" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-photo" viewBox="0 0 24 24"><path d="M3.5 7.5h3.2L8.3 5h7.4l1.6 2.5h3.2v11.5h-17Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.3" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-zoom" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m15.5 15.5 5 5M8 10.5h5M10.5 8v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="logo" viewBox="0 0 34 34"><path d="M17 2.5 29.6 9.75v14.5L17 31.5 4.4 24.25V9.75Z" fill="none" style="stroke:var(--accent)" stroke-width="2.2" stroke-linejoin="round"/><path d="M11 12.5h12M10 17h14M11 21.5h12" fill="none" style="stroke:var(--text)" stroke-width="2" stroke-linecap="round"/></symbol>
   </defs>
@@ -465,6 +493,7 @@ section[id],footer[id]{scroll-margin-top:72px}
       <a href="#services">Услуги</a>
       <a href="#gallery">Работы</a>
       <a href="#prices">Цены</a>
+      <a href="#faq">Вопросы</a>
       <a href="#contacts">Контакты</a>
     </nav>
     <a class="btn btn-accent btn-sm header-tg" href="https://t.me/polymer_3d_lab" target="_blank" rel="noopener">
@@ -477,7 +506,8 @@ section[id],footer[id]{scroll-margin-top:72px}
     <a href="#services">Услуги</a>
     <a href="#gallery">Работы</a>
     <a href="#prices">Цены</a>
-    <a href="#contacts">Контакты</a>
+    <a href="#faq">Вопросы</a>
+      <a href="#contacts">Контакты</a>
   </nav>
 </header>
 
@@ -551,7 +581,7 @@ section[id],footer[id]{scroll-margin-top:72px}
         </div>
       </article>
       <article class="card pcard reveal">
-        <div class="p-media"><span class="p-tag">Опт</span><img src="https://b00.img.avito.st/image/1/1.UOLplLa4_AvfI34GxdVWi8w0_g1XNX4d3zj-CVk99AFf.I1V_8YkjnwN1KM_lKf0Hht8dt0K6NrXL_rfCGeGC_us?cqp=2.YN7dHnrK-mhyvtTBpyubvaFoUVdTM3W7BFy5YaeXzZ_Q2glMrBb_s4irqaJhHlfJPgeDGUqVXQ==" alt="Заглушка петли багажника Lada Vesta SW Cross" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.p-media').classList.add('p-noimg')"><svg class="p-ph" aria-hidden="true"><use href="#i-photo"/></svg></div>
+        <div class="p-media"><span class="p-tag">Lada Vesta</span><img src="img/products/zaglushka-vesta-foto.jpg" alt="Заглушка петли багажника Lada Vesta SW Cross" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.p-media').classList.add('p-noimg')"><svg class="p-ph" aria-hidden="true"><use href="#i-photo"/></svg></div>
         <div class="p-body">
           <h3>Заглушка петли багажника Lada Vesta SW Cross / NG Cross</h3>
           <p>Закрывает открытые металлические петли и заводские винты — багажник выглядит аккуратно, пыль и грязь не копятся.</p>
@@ -563,10 +593,10 @@ section[id],footer[id]{scroll-margin-top:72px}
         </div>
       </article>
       <article class="card pcard reveal">
-        <div class="p-media"><img src="https://40.img.avito.st/image/1/1.bQYFMLa4we8zh0PiUy05eSCQw-m7kUP5M5zD7bWZyeWz.o5UerSGT7EshaTYVzH0CjDxCya5zCfMf2C5f7YVBVMY" alt="Подстаканник Lada Niva / Niva Legend" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.p-media').classList.add('p-noimg')"><svg class="p-ph" aria-hidden="true"><use href="#i-photo"/></svg></div>
+        <div class="p-media"><span class="p-tag">Lada Niva</span><img src="img/products/podstakannik-niva-foto.jpg" alt="Подстаканник Lada Niva / Niva Legend" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.p-media').classList.add('p-noimg')"><svg class="p-ph" aria-hidden="true"><use href="#i-photo"/></svg></div>
         <div class="p-body">
           <h3>Подстаканник Lada Niva / Niva Legend</h3>
-          <p>Подстаканник для салона Нивы. Новый, в наличии.</p>
+          <p>Двойной подстаканник для салона Нивы, фактурная поверхность. Вставляется в штатное место.</p>
           <div class="p-price"><b>260 ₽</b><span>за шт</span></div>
           <div class="p-actions">
             <a class="btn btn-accent btn-sm" href="https://www.avito.ru/naberezhnye_chelny/zapchasti_i_aksessuary/podstakannik_lada_niva_niva_legend_8110756111" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-ext"/></svg>На Авито</a>
@@ -721,11 +751,29 @@ section[id],footer[id]{scroll-margin-top:72px}
   </div>
 </section>
 
+<!-- ===== Вопросы ===== -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>06 · Вопросы</p>
+      <h2>Частые вопросы</h2>
+    </div>
+    <div class="faq">
+      <details class="reveal"><summary>Можно сделать деталь по фото?</summary><p>По фото можно оценить задачу и примерную цену. Но чтобы деталь точно встала на место, нужен образец: привезите сломанную деталь, я сниму размеры сам.</p></details>
+      <details class="reveal"><summary>Сколько времени занимает заказ?</summary><p>Зависит от размера и сложности детали. Точный срок назову, когда посмотрю образец или чертёж.</p></details>
+      <details class="reveal"><summary>Какой пластик выбрать?</summary><p>Подберу сам под задачу: PETG — для влаги и нагрузки, ABS — где есть нагрев, PLA — для декора.</p></details>
+      <details class="reveal"><summary>Как оплатить?</summary><p>Работаю по предоплате. Товары из раздела «Товары в наличии» можно купить с Авито Доставкой.</p></details>
+      <details class="reveal"><summary>Делаете партии?</summary><p>Да, для ИП и компаний — от 10 штук. Цена зависит от тиража, напишите количество в Telegram.</p></details>
+      <details class="reveal"><summary>Если деталь не подойдёт?</summary><p>Переделаю бесплатно.</p></details>
+    </div>
+  </div>
+</section>
+
 <!-- ===== 9. Контакты ===== -->
 <section class="section" id="contacts">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>06 · Контакты</p>
+      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>07 · Контакты</p>
       <h2>Контакты</h2>
     </div>
     <div class="contacts">
@@ -766,9 +814,19 @@ section[id],footer[id]{scroll-margin-top:72px}
 </footer>
 
 <!-- Закреплённая кнопка (только телефон) -->
-<a class="btn btn-accent sticky-tg" href="https://t.me/polymer_3d_lab" target="_blank" rel="noopener">
-  <svg aria-hidden="true"><use href="#i-tg"/></svg>Написать в Telegram
-</a>
+<div class="sticky-bar">
+  <a class="btn btn-accent" href="https://t.me/polymer_3d_lab" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-tg"/></svg>Написать в Telegram</a>
+  <a class="btn btn-call" href="tel:+79377776390" aria-label="Позвонить"><svg aria-hidden="true"><use href="#i-phone"/></svg></a>
+</div>
+
+<!-- Просмотр фото -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Просмотр фото">
+  <button class="lb-btn lb-close" type="button" aria-label="Закрыть">×</button>
+  <button class="lb-btn lb-prev" type="button" aria-label="Предыдущее фото">‹</button>
+  <img alt="">
+  <button class="lb-btn lb-next" type="button" aria-label="Следующее фото">›</button>
+  <p class="lb-cap"></p>
+</div>
 
 <script>
 (function(){
@@ -818,7 +876,7 @@ section[id],footer[id]{scroll-margin-top:72px}
       return '<article class="card pcard reveal in">'+
         '<div class="p-media'+(img?'':' p-noimg')+'">'+(p.tag?'<span class="p-tag">'+esc(p.tag)+'</span>':'')+
         (img?'<img src="'+esc(img)+'" alt="'+esc(p.title)+'" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest(\'.p-media\').classList.add(\'p-noimg\')">':'')+
-        '<svg class="p-ph" aria-hidden="true"><use href="#i-photo"/></svg></div>'+
+        (img?'<span class="zoom-hint" aria-hidden="true"><svg><use href="#i-zoom"/></svg></span>':'')+'<svg class="p-ph" aria-hidden="true"><use href="#i-photo"/></svg></div>'+
         '<div class="p-body"><h3>'+esc(p.title)+'</h3>'+(p.text?'<p>'+esc(p.text)+'</p>':'')+
         '<div class="p-price"><b>'+esc(p.price)+'</b>'+(p.unit?'<span>'+esc(p.unit)+'</span>':'')+'</div>'+
         '<div class="p-actions">'+(av?'<a class="btn btn-accent btn-sm" href="'+esc(av)+'" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-ext"/></svg>На Авито</a>':'')+
@@ -832,6 +890,39 @@ section[id],footer[id]{scroll-margin-top:72px}
       return '<figure class="shot reveal in"><img src="'+esc(img)+'" alt="'+esc(g.caption||'Работа')+'" loading="lazy" referrerpolicy="no-referrer">'+(g.caption?'<figcaption>'+esc(g.caption)+'</figcaption>':'')+'</figure>';}).join('');
   }).catch(function(){});
 
+
+  // Увеличение фото по нажатию (товары и галерея)
+  (function(){
+    var lb=document.getElementById('lb'); if(!lb) return;
+    var im=lb.querySelector('img'), cap=lb.querySelector('.lb-cap'), list=[], i=0, startX=null;
+    function show(){var it=list[i]; im.src=it.src; im.alt=it.alt; cap.textContent=it.alt;
+      lb.querySelector('.lb-prev').style.display=lb.querySelector('.lb-next').style.display=list.length>1?'':'none';}
+    function open(el){
+      var group=el.closest('#productGrid,#galleryGrid');
+      var imgs=group?[].slice.call(group.querySelectorAll('img')):[el];
+      imgs=imgs.filter(function(x){return x.getAttribute('src');});
+      list=imgs.map(function(x){return {src:x.currentSrc||x.src,alt:x.alt||''};});
+      i=Math.max(0,imgs.indexOf(el)); show();
+      lb.classList.add('open'); document.body.classList.add('lb-lock'); lb.querySelector('.lb-close').focus();
+    }
+    function close(){lb.classList.remove('open'); document.body.classList.remove('lb-lock'); im.removeAttribute('src');}
+    function step(d){if(list.length<2)return; i=(i+d+list.length)%list.length; show();}
+    document.addEventListener('click',function(e){
+      var t=e.target;
+      if(t.tagName==='IMG'&&t.closest('.p-media,.shot')&&!t.closest('.lb')){e.preventDefault();open(t);}
+    });
+    lb.addEventListener('click',function(e){
+      if(e.target.closest('.lb-close')||e.target===lb)close();
+      else if(e.target.closest('.lb-prev'))step(-1);
+      else if(e.target.closest('.lb-next'))step(1);
+    });
+    document.addEventListener('keydown',function(e){
+      if(!lb.classList.contains('open'))return;
+      if(e.key==='Escape')close(); if(e.key==='ArrowLeft')step(-1); if(e.key==='ArrowRight')step(1);
+    });
+    lb.addEventListener('touchstart',function(e){startX=e.touches[0].clientX;},{passive:true});
+    lb.addEventListener('touchend',function(e){if(startX===null)return;var dx=e.changedTouches[0].clientX-startX;if(Math.abs(dx)>50)step(dx<0?1:-1);startX=null;});
+  })();
 
   // Счётчик посещений (abacus) — свои заходы владельца не считаются
   (function(){

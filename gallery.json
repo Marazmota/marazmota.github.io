@@ -18,5 +18,13 @@
   {
     "img": "img/dewalt-dva-cveta.jpg",
     "caption": "Два цвета"
+  },
+  {
+    "img": "img/products/zaglushka-vesta-foto.jpg",
+    "caption": "Заглушка Lada Vesta"
+  },
+  {
+    "img": "img/products/podstakannik-niva-foto.jpg",
+    "caption": "Подстаканник Niva"
   }
 ]
