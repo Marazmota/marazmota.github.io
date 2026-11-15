@@ -545,7 +545,7 @@ section[id],footer[id]{scroll-margin-top:72px}
       <h2>Товары в наличии</h2>
       <p>То, что уже напечатано и продаётся на Авито. Можно купить с Авито Доставкой или забрать лично в Набережных Челнах.</p>
     </div>
-    <div class="pgrid">
+    <div class="pgrid" id="productGrid">
       <article class="card pcard reveal">
         <div class="p-media"><span class="p-tag">Хит</span><img src="img/nabor.jpg" alt="Держатели аккумуляторов Makita 18V и DeWalt 12V" loading="lazy"><svg class="p-ph" aria-hidden="true"><use href="#i-photo"/></svg></div>
         <div class="p-body">
@@ -685,7 +685,7 @@ section[id],footer[id]{scroll-margin-top:72px}
       <img src="foto-1.jpg" alt="Что на фото" loading="lazy">
       и при желании поменяйте подпись в <figcaption>.
     -->
-    <div class="gallery">
+    <div class="gallery" id="galleryGrid">
       <figure class="shot reveal"><img src="img/nabor.jpg" alt="Набор держателей Makita и DeWalt" loading="lazy" width="900" height="900"><figcaption>Набор держателей</figcaption></figure>
       <figure class="shot reveal"><img src="img/makita-stena.jpg" alt="Держатель Makita 18V на стене" loading="lazy" width="900" height="900"><figcaption>Makita 18V на стене</figcaption></figure>
       <figure class="shot reveal"><img src="img/dewalt-akkum.jpg" alt="DeWalt 12V с аккумулятором" loading="lazy" width="900" height="900"><figcaption>DeWalt 12V</figcaption></figure>
@@ -793,6 +793,34 @@ section[id],footer[id]{scroll-margin-top:72px}
   } else {
     items.forEach(function(el){ el.classList.add('in'); });
   }
+
+
+  // Товары и галерея из JSON (редактируются в admin.html)
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function safeUrl(u){u=String(u||'').trim();return /^(https?:\/\/|img\/)/i.test(u)?u:'';}
+  function getJSON(name){return fetch(name+'?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();});}
+  var pg=document.getElementById('productGrid');
+  if(pg) getJSON('products.json').then(function(list){
+    var items=(list||[]).filter(function(p){return !p.hidden;});
+    if(!items.length) return;
+    pg.innerHTML=items.map(function(p){
+      var img=safeUrl(p.img), av=safeUrl(p.avito);
+      return '<article class="card pcard reveal in">'+
+        '<div class="p-media'+(img?'':' p-noimg')+'">'+(p.tag?'<span class="p-tag">'+esc(p.tag)+'</span>':'')+
+        (img?'<img src="'+esc(img)+'" alt="'+esc(p.title)+'" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest(\'.p-media\').classList.add(\'p-noimg\')">':'')+
+        '<svg class="p-ph" aria-hidden="true"><use href="#i-photo"/></svg></div>'+
+        '<div class="p-body"><h3>'+esc(p.title)+'</h3>'+(p.text?'<p>'+esc(p.text)+'</p>':'')+
+        '<div class="p-price"><b>'+esc(p.price)+'</b>'+(p.unit?'<span>'+esc(p.unit)+'</span>':'')+'</div>'+
+        '<div class="p-actions">'+(av?'<a class="btn btn-accent btn-sm" href="'+esc(av)+'" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-ext"/></svg>На Авито</a>':'')+
+        '<a class="btn btn-outline btn-sm" href="https://t.me/polymer_3d_lab" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-tg"/></svg>Telegram</a></div></div></article>';
+    }).join('');
+  }).catch(function(){});
+  var gg=document.getElementById('galleryGrid');
+  if(gg) getJSON('gallery.json').then(function(list){
+    if(!list||!list.length) return;
+    gg.innerHTML=list.map(function(g){var img=safeUrl(g.img);if(!img)return '';
+      return '<figure class="shot reveal in"><img src="'+esc(img)+'" alt="'+esc(g.caption||'Работа')+'" loading="lazy" referrerpolicy="no-referrer">'+(g.caption?'<figcaption>'+esc(g.caption)+'</figcaption>':'')+'</figure>';}).join('');
+  }).catch(function(){});
 
   // Подсветка текущего раздела в меню
   var links = document.querySelectorAll('.nav a');

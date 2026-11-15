@@ -1,0 +1,35 @@
+[
+  {
+    "id": "derzhateli",
+    "title": "Держатели аккумуляторов Makita, DeWalt",
+    "text": "Настенные держатели для Makita LXT 18V и DeWalt 12V / 20V. Крепление на 2 самореза, чёрный PETG или натуральный PLA.",
+    "price": "900 ₽",
+    "unit": "за 3 шт · от 5 шт — 270 ₽/шт",
+    "tag": "Хит",
+    "img": "img/nabor.jpg",
+    "avito": "https://www.avito.ru/naberezhnye_chelny/remont_i_stroitelstvo/derzhateli_akkumulyatora_makita_dewalt_ot_3_sht_8545920925",
+    "hidden": false
+  },
+  {
+    "id": "zaglushka-vesta",
+    "title": "Заглушка петли багажника Lada Vesta SW Cross / NG Cross",
+    "text": "Закрывает открытые металлические петли и заводские винты — багажник выглядит аккуратно, пыль и грязь не копятся.",
+    "price": "139 ₽",
+    "unit": "за шт · оптом и в розницу",
+    "tag": "Опт",
+    "img": "https://b00.img.avito.st/image/1/1.UOLplLa4_AvfI34GxdVWi8w0_g1XNX4d3zj-CVk99AFf.I1V_8YkjnwN1KM_lKf0Hht8dt0K6NrXL_rfCGeGC_us?cqp=2.YN7dHnrK-mhyvtTBpyubvaFoUVdTM3W7BFy5YaeXzZ_Q2glMrBb_s4irqaJhHlfJPgeDGUqVXQ==",
+    "avito": "https://www.avito.ru/naberezhnye_chelny/zapchasti_i_aksessuary/opt_zaglushka_petli_bagazhnika_lada_vesta_sw_cross_8110877441",
+    "hidden": false
+  },
+  {
+    "id": "podstakannik-niva",
+    "title": "Подстаканник Lada Niva / Niva Legend",
+    "text": "Подстаканник для салона Нивы. Новый, в наличии.",
+    "price": "260 ₽",
+    "unit": "за шт",
+    "tag": "",
+    "img": "https://40.img.avito.st/image/1/1.bQYFMLa4we8zh0PiUy05eSCQw-m7kUP5M5zD7bWZyeWz.o5UerSGT7EshaTYVzH0CjDxCya5zCfMf2C5f7YVBVMY",
+    "avito": "https://www.avito.ru/naberezhnye_chelny/zapchasti_i_aksessuary/podstakannik_lada_niva_niva_legend_8110756111",
+    "hidden": false
+  }
+]

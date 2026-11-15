@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Админка — POLYMER 3D LAB</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E0F12'/%3E%3Cpath d='M16 3.5 26.8 9.75v12.5L16 28.5 5.2 22.25V9.75Z' fill='none' stroke='%23C5F04A' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#0E0F12;--card:#16181D;--line:#1D2026;--line2:#2A2E36;--accent:#C5F04A;--text:#fff;--muted:#9AA3AE;--red:#FF6B6B}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Manrope,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent)}
+.wrap{max-width:1000px;margin:0 auto;padding:20px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(14,15,18,.9);backdrop-filter:blur(10px);z-index:10}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.04em}
+.brand small{color:var(--muted);font-weight:600;letter-spacing:.2em;font-size:11px}
+h1,h2,h3{margin:0;line-height:1.2}
+h2{font-size:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:9px 16px;border-radius:10px;border:1.5px solid var(--line2);background:transparent;color:var(--text);font:600 14px/1.2 inherit;cursor:pointer;text-decoration:none}
+.btn:hover{border-color:var(--accent)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn-accent{background:var(--accent);border-color:var(--accent);color:#0E0F12}
+.btn-danger{color:var(--red)}
+.btn-danger:hover{border-color:var(--red)}
+.btn-icon{min-width:42px;padding:9px}
+label{display:block;font-weight:600;font-size:13px;color:var(--muted);margin:14px 0 6px}
+input[type=text],input[type=password],input[type=url],textarea{width:100%;background:var(--bg);color:var(--text);border:1.5px solid var(--line2);border-radius:10px;padding:10px 12px;font:inherit}
+input:focus,textarea:focus{outline:none;border-color:var(--accent)}
+textarea{min-height:90px;resize:vertical}
+.row{display:grid;gap:12px}
+@media(min-width:640px){.row-2{grid-template-columns:1fr 1fr}}
+.tabs{display:flex;gap:8px;margin:20px 0}
+.tabs button.active{background:var(--accent);color:#0E0F12;border-color:var(--accent)}
+.list{display:grid;gap:10px}
+.item{display:grid;grid-template-columns:72px 1fr auto;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px}
+.item.hidden-item{opacity:.55}
+.thumb{width:72px;height:72px;border-radius:10px;object-fit:cover;background:repeating-linear-gradient(to bottom,var(--line) 0 1px,transparent 1px 7px)}
+.item h3{font-size:15px}
+.item p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.item .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:640px){.item{grid-template-columns:56px 1fr}.thumb{width:56px;height:56px}.item .acts{grid-column:1/-1;justify-content:flex-start}}
+.badge{display:inline-block;font-size:11px;font-weight:800;padding:2px 7px;border-radius:6px;background:var(--line2);color:var(--muted);margin-left:6px;vertical-align:middle}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:14px}
+.status{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--card);border:1px solid var(--line2);border-left:4px solid var(--accent);border-radius:12px;padding:12px 18px;max-width:92vw;box-shadow:0 10px 30px rgba(0,0,0,.4);display:none;z-index:50}
+.status.err{border-left-color:var(--red)}
+.dirty{color:var(--accent);font-weight:700}
+dialog{background:var(--card);color:var(--text);border:1px solid var(--line2);border-radius:18px;padding:0;width:min(640px,94vw);max-height:92vh}
+dialog::backdrop{background:rgba(0,0,0,.7)}
+dialog form{padding:22px}
+.dlg-acts{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+.preview{display:flex;gap:12px;align-items:center;margin-top:8px}
+.preview img{width:110px;height:110px;object-fit:cover;border-radius:10px;border:1px solid var(--line2)}
+.check{display:flex;gap:10px;align-items:center;margin-top:14px;color:var(--text);font-weight:600}
+.check input{width:20px;height:20px;accent-color:var(--accent)}
+.help{color:var(--muted);font-size:13px}
+.help ol{padding-left:20px;margin:8px 0}
+code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var(--line2)}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 2.5 29.6 9.75v14.5L17 31.5 4.4 24.25V9.75Z" fill="none" stroke="#C5F04A" stroke-width="2.2" stroke-linejoin="round"/><path d="M11 12.5h12M10 17h14M11 21.5h12" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg><div>POLYMER<br><small>АДМИНКА</small></div></div>
+  <div style="display:flex;gap:8px"><a class="btn" href="./" target="_blank" rel="noopener">Открыть сайт</a><button class="btn" id="logoutBtn" hidden>Выйти</button></div>
+</header>
+
+<main class="wrap">
+
+  <!-- Вход -->
+  <section id="loginView" class="card" style="max-width:560px;margin:40px auto" hidden>
+    <h2>Вход</h2>
+    <p class="help">Вход по личному токену GitHub. Токен хранится только в этом браузере и никуда, кроме GitHub, не отправляется.</p>
+    <form id="loginForm">
+      <label for="tokenInput">Токен GitHub</label>
+      <input type="password" id="tokenInput" autocomplete="off" placeholder="github_pat_…" required>
+      <label class="check"><input type="checkbox" id="rememberInput" checked> Запомнить на этом устройстве</label>
+      <div class="dlg-acts"><button class="btn btn-accent" type="submit">Войти</button></div>
+    </form>
+    <details class="help" style="margin-top:16px">
+      <summary style="cursor:pointer;color:var(--text);font-weight:600">Как получить токен</summary>
+      <ol>
+        <li>Открой <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
+        <li>Token name: <code>polymer-admin</code>, Expiration — сколько удобно (например, 1 год)</li>
+        <li>Repository access → <b>Only select repositories</b> → <code>marazmota.github.io</code></li>
+        <li>Permissions → Repository permissions → <b>Contents: Read and write</b></li>
+        <li>Generate token, скопируй и вставь сюда. Никому его не отправляй.</li>
+      </ol>
+    </details>
+  </section>
+
+  <!-- Админка -->
+  <section id="appView" hidden>
+    <div class="tabs">
+      <button class="btn active" data-tab="products">Товары</button>
+      <button class="btn" data-tab="gallery">Галерея</button>
+    </div>
+
+    <div id="tab-products">
+      <div class="bar">
+        <h2>Товары <span class="help" id="pCount"></span></h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="addProduct">+ Добавить товар</button>
+          <button class="btn btn-accent" id="saveProducts" disabled>Опубликовать</button>
+        </div>
+      </div>
+      <p class="help" id="pDirty"></p>
+      <div class="list" id="pList"></div>
+    </div>
+
+    <div id="tab-gallery" hidden>
+      <div class="bar">
+        <h2>Галерея <span class="help" id="gCount"></span></h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <label class="btn" style="margin:0;color:var(--text)">+ Добавить фото<input type="file" id="gFiles" accept="image/*" multiple hidden></label>
+          <button class="btn btn-accent" id="saveGallery" disabled>Опубликовать</button>
+        </div>
+      </div>
+      <p class="help" id="gDirty"></p>
+      <div class="list" id="gList"></div>
+    </div>
+
+    <p class="help" style="margin-top:28px">После «Опубликовать» сайт обновляется примерно за 1–2 минуты. Если не видишь изменений — обнови страницу сайта (Ctrl+F5).</p>
+  </section>
+</main>
+
+<!-- Редактор товара -->
+<dialog id="pDialog">
+  <form id="pForm" method="dialog">
+    <h2 id="pDialogTitle">Товар</h2>
+    <label for="f-title">Название *</label>
+    <input type="text" id="f-title" required maxlength="120">
+    <label for="f-text">Описание</label>
+    <textarea id="f-text" maxlength="600"></textarea>
+    <div class="row row-2">
+      <div><label for="f-price">Цена *</label><input type="text" id="f-price" required placeholder="900 ₽"></div>
+      <div><label for="f-unit">Подпись к цене</label><input type="text" id="f-unit" placeholder="за 3 шт"></div>
+    </div>
+    <div class="row row-2">
+      <div><label for="f-tag">Метка (Хит, Опт, Новинка)</label><input type="text" id="f-tag" maxlength="20"></div>
+      <div><label for="f-avito">Ссылка на Авито</label><input type="url" id="f-avito" placeholder="https://www.avito.ru/…"></div>
+    </div>
+    <label>Фото</label>
+    <div class="preview">
+      <img id="f-preview" alt="" hidden>
+      <div style="display:grid;gap:8px">
+        <label class="btn" style="margin:0;color:var(--text)">Загрузить фото<input type="file" id="f-file" accept="image/*" hidden></label>
+        <span class="help" id="f-imgstate"></span>
+      </div>
+    </div>
+    <label for="f-img">или ссылка на фото</label>
+    <input type="text" id="f-img" placeholder="img/… или https://…">
+    <label class="check"><input type="checkbox" id="f-hidden"> Скрыть с сайта</label>
+    <div class="dlg-acts">
+      <button class="btn" type="button" id="pCancel">Отмена</button>
+      <button class="btn btn-accent" type="submit" id="pOk">Готово</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="status" id="status" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var OWNER='Marazmota', REPO='marazmota.github.io', BRANCH='main';
+  var API='https://api.github.com/repos/'+OWNER+'/'+REPO;
+  var KEY='polymer_admin_token';
+  var token=null;
+  var state={products:[],gallery:[],shaP:null,shaG:null,dirtyP:false,dirtyG:false};
+  var $=function(id){return document.getElementById(id);};
+
+  // ---------- утилиты ----------
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function safeUrl(u){u=String(u||'').trim();return /^(https?:\/\/|img\/)/i.test(u)?u:'';}
+  function store(){try{return window.localStorage;}catch(e){return null;}}
+  var statusTimer;
+  function say(msg,isErr){var s=$('status');s.textContent=msg;s.className='status'+(isErr?' err':'');s.style.display='block';clearTimeout(statusTimer);statusTimer=setTimeout(function(){s.style.display='none';},isErr?9000:4000);}
+  function b64encodeUtf8(str){var bytes=new TextEncoder().encode(str);var bin='';for(var i=0;i<bytes.length;i+=0x8000){bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+0x8000));}return btoa(bin);}
+  function b64decodeUtf8(b64){var bin=atob(b64.replace(/\n/g,''));var bytes=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return new TextDecoder().decode(bytes);}
+  function slug(s){var map={а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'c',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya'};
+    return String(s||'').toLowerCase().split('').map(function(c){return map[c]!=null?map[c]:c;}).join('').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)||'item';}
+  function imgSrc(u){u=safeUrl(u);return u;}
+
+  // ---------- GitHub API ----------
+  function gh(path,opts){
+    opts=opts||{};
+    opts.headers=Object.assign({'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},opts.headers||{});
+    return fetch(API+path,opts).then(function(r){
+      if(r.status===401) throw new Error('Токен не подходит или истёк. Выйди и войди с новым токеном.');
+      if(r.status===403) throw new Error('Нет прав на запись. Проверь, что у токена есть Contents: Read and write для '+REPO+'.');
+      if(r.status===409) throw new Error('Файл изменился, пока ты редактировал. Обнови страницу админки и повтори.');
+      if(!r.ok&&r.status!==404) return r.text().then(function(t){throw new Error('Ошибка GitHub '+r.status+': '+t.slice(0,160));});
+      return r;
+    });
+  }
+  function getFile(path){
+    return gh('/contents/'+path+'?ref='+BRANCH+'&t='+Date.now(),{cache:'no-store'}).then(function(r){
+      if(r.status===404) return {sha:null,text:null};
+      return r.json().then(function(j){return {sha:j.sha,text:b64decodeUtf8(j.content||'')};});
+    });
+  }
+  function putFile(path,b64,sha,message){
+    var body={message:message,content:b64,branch:BRANCH};if(sha)body.sha=sha;
+    return gh('/contents/'+path,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();});
+  }
+
+  // ---------- картинки ----------
+  function resizeToJpegB64(file,max){
+    return new Promise(function(resolve,reject){
+      var url=URL.createObjectURL(file);var img=new Image();
+      img.onload=function(){
+        var w=img.naturalWidth,h=img.naturalHeight,k=Math.min(1,max/Math.max(w,h));
+        var c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);
+        var ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);
+        URL.revokeObjectURL(url);
+        var data=c.toDataURL('image/jpeg',0.85);
+        resolve({b64:data.split(',')[1],dataUrl:data});
+      };
+      img.onerror=function(){URL.revokeObjectURL(url);reject(new Error('Не получилось открыть фото. Попробуй JPG или PNG.'));};
+      img.src=url;
+    });
+  }
+  function uploadImage(file,folder,name){
+    return resizeToJpegB64(file,1400).then(function(res){
+      var path='img/'+folder+'/'+slug(name)+'-'+Date.now()+'.jpg';
+      return putFile(path,res.b64,null,'Фото: '+path).then(function(){return {path:path,dataUrl:res.dataUrl};});
+    });
+  }
+  var localPreviews={}; // путь -> dataUrl, пока сайт не пересобрался
+
+  // ---------- загрузка данных ----------
+  function loadAll(){
+    say('Загружаю данные…');
+    return Promise.all([getFile('products.json'),getFile('gallery.json')]).then(function(r){
+      state.shaP=r[0].sha;state.shaG=r[1].sha;
+      state.products=r[0].text?JSON.parse(r[0].text):[];
+      state.gallery=r[1].text?JSON.parse(r[1].text):[];
+      state.dirtyP=state.dirtyG=false;
+      render();say('Готово');
+    });
+  }
+
+  // ---------- отрисовка ----------
+  function thumb(u){var src=localPreviews[u]||imgSrc(u);return src?'<img class="thumb" src="'+esc(src)+'" alt="" referrerpolicy="no-referrer" loading="lazy">':'<div class="thumb"></div>';}
+  function render(){
+    var P=state.products;
+    $('pCount').textContent='('+P.length+')';
+    $('pList').innerHTML=P.length?P.map(function(p,i){
+      return '<div class="item'+(p.hidden?' hidden-item':'')+'">'+thumb(p.img)+
+        '<div><h3>'+esc(p.title)+(p.tag?'<span class="badge">'+esc(p.tag)+'</span>':'')+(p.hidden?'<span class="badge">скрыт</span>':'')+'</h3><p>'+esc(p.price)+(p.unit?' · '+esc(p.unit):'')+'</p></div>'+
+        '<div class="acts">'+
+        '<button class="btn btn-icon" data-act="up" data-i="'+i+'" title="Выше" aria-label="Выше"'+(i===0?' disabled':'')+'>↑</button>'+
+        '<button class="btn btn-icon" data-act="down" data-i="'+i+'" title="Ниже" aria-label="Ниже"'+(i===P.length-1?' disabled':'')+'>↓</button>'+
+        '<button class="btn" data-act="hide" data-i="'+i+'">'+(p.hidden?'Показать':'Скрыть')+'</button>'+
+        '<button class="btn" data-act="edit" data-i="'+i+'">Изменить</button>'+
+        '<button class="btn btn-danger" data-act="del" data-i="'+i+'">Удалить</button></div></div>';
+    }).join(''):'<p class="help">Товаров пока нет. Нажми «Добавить товар».</p>';
+    $('saveProducts').disabled=!state.dirtyP;
+    $('pDirty').innerHTML=state.dirtyP?'<span class="dirty">Есть неопубликованные изменения</span>':'';
+
+    var G=state.gallery;
+    $('gCount').textContent='('+G.length+')';
+    $('gList').innerHTML=G.length?G.map(function(g,i){
+      return '<div class="item">'+thumb(g.img)+
+        '<div><input type="text" value="'+esc(g.caption)+'" data-cap="'+i+'" placeholder="Подпись" maxlength="60" aria-label="Подпись к фото"></div>'+
+        '<div class="acts">'+
+        '<button class="btn btn-icon" data-gact="up" data-i="'+i+'" aria-label="Выше"'+(i===0?' disabled':'')+'>↑</button>'+
+        '<button class="btn btn-icon" data-gact="down" data-i="'+i+'" aria-label="Ниже"'+(i===G.length-1?' disabled':'')+'>↓</button>'+
+        '<button class="btn btn-danger" data-gact="del" data-i="'+i+'">Удалить</button></div></div>';
+    }).join(''):'<p class="help">В галерее пока нет фото.</p>';
+    $('saveGallery').disabled=!state.dirtyG;
+    $('gDirty').innerHTML=state.dirtyG?'<span class="dirty">Есть неопубликованные изменения</span>':'';
+  }
+  function move(arr,i,d){var j=i+d;if(j<0||j>=arr.length)return;var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+
+  // ---------- товары ----------
+  var editing=-1, pendingImg=null;
+  function openEditor(i){
+    editing=i;var p=i>=0?state.products[i]:{title:'',text:'',price:'',unit:'',tag:'',img:'',avito:'',hidden:false};
+    $('pDialogTitle').textContent=i>=0?'Изменить товар':'Новый товар';
+    $('f-title').value=p.title||'';$('f-text').value=p.text||'';$('f-price').value=p.price||'';$('f-unit').value=p.unit||'';
+    $('f-tag').value=p.tag||'';$('f-avito').value=p.avito||'';$('f-img').value=p.img||'';$('f-hidden').checked=!!p.hidden;
+    $('f-file').value='';$('f-imgstate').textContent='';
+    setPreview(p.img);
+    $('pDialog').showModal();
+  }
+  function setPreview(u){var src=localPreviews[u]||imgSrc(u);var im=$('f-preview');if(src){im.src=src;im.referrerPolicy='no-referrer';im.hidden=false;}else{im.hidden=true;}}
+  $('f-img').addEventListener('input',function(){setPreview(this.value);});
+  $('f-file').addEventListener('change',function(){
+    var f=this.files&&this.files[0];if(!f)return;
+    $('f-imgstate').textContent='Загружаю фото…';$('pOk').disabled=true;
+    uploadImage(f,'products',$('f-title').value||'tovar').then(function(r){
+      localPreviews[r.path]=r.dataUrl;$('f-img').value=r.path;setPreview(r.path);
+      $('f-imgstate').textContent='Фото загружено';
+    }).catch(function(e){$('f-imgstate').textContent='';say(e.message,true);}).then(function(){$('pOk').disabled=false;});
+  });
+  $('pCancel').addEventListener('click',function(){$('pDialog').close();});
+  $('pForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var title=$('f-title').value.trim(),price=$('f-price').value.trim();
+    if(!title||!price){say('Заполни название и цену',true);return;}
+    var avito=$('f-avito').value.trim(), img=$('f-img').value.trim();
+    if(avito&&!/^https?:\/\//i.test(avito)){say('Ссылка на Авито должна начинаться с https://',true);return;}
+    if(img&&!safeUrl(img)){say('Ссылка на фото должна начинаться с https:// или img/',true);return;}
+    var p={id:editing>=0?(state.products[editing].id||slug(title)):slug(title)+'-'+Date.now().toString(36),
+      title:title,text:$('f-text').value.trim(),price:price,unit:$('f-unit').value.trim(),tag:$('f-tag').value.trim(),
+      img:img,avito:avito,hidden:$('f-hidden').checked};
+    if(editing>=0)state.products[editing]=p;else state.products.unshift(p);
+    state.dirtyP=true;$('pDialog').close();render();say('Изменения сохранены в черновике — нажми «Опубликовать»');
+  });
+  $('addProduct').addEventListener('click',function(){openEditor(-1);});
+  $('pList').addEventListener('click',function(e){
+    var b=e.target.closest('button[data-act]');if(!b)return;var i=+b.dataset.i,P=state.products;
+    if(b.dataset.act==='edit')return openEditor(i);
+    if(b.dataset.act==='up')move(P,i,-1);
+    if(b.dataset.act==='down')move(P,i,1);
+    if(b.dataset.act==='hide')P[i].hidden=!P[i].hidden;
+    if(b.dataset.act==='del'){if(!confirm('Удалить «'+P[i].title+'»?'))return;P.splice(i,1);}
+    state.dirtyP=true;render();
+  });
+  $('saveProducts').addEventListener('click',function(){
+    var btn=this;btn.disabled=true;say('Публикую товары…');
+    getFile('products.json').then(function(cur){
+      return putFile('products.json',b64encodeUtf8(JSON.stringify(state.products,null,2)+'\n'),cur.sha,'Товары: обновление из админки');
+    }).then(function(j){state.shaP=j.content&&j.content.sha;state.dirtyP=false;render();say('Опубликовано! Сайт обновится через 1–2 минуты');})
+    .catch(function(e){btn.disabled=false;say(e.message,true);});
+  });
+
+  // ---------- галерея ----------
+  $('gFiles').addEventListener('change',function(){
+    var files=[].slice.call(this.files||[]);this.value='';if(!files.length)return;
+    var chain=Promise.resolve(),n=0;
+    files.forEach(function(f){chain=chain.then(function(){
+      say('Загружаю фото '+(++n)+' из '+files.length+'…');
+      return uploadImage(f,'gallery','foto').then(function(r){localPreviews[r.path]=r.dataUrl;state.gallery.unshift({img:r.path,caption:''});state.dirtyG=true;render();});
+    });});
+    chain.then(function(){say('Фото загружены — добавь подписи и нажми «Опубликовать»');}).catch(function(e){say(e.message,true);});
+  });
+  $('gList').addEventListener('input',function(e){var t=e.target;if(t.dataset.cap==null)return;state.gallery[+t.dataset.cap].caption=t.value;if(!state.dirtyG){state.dirtyG=true;$('saveGallery').disabled=false;$('gDirty').innerHTML='<span class="dirty">Есть неопубликованные изменения</span>';}});
+  $('gList').addEventListener('click',function(e){
+    var b=e.target.closest('button[data-gact]');if(!b)return;var i=+b.dataset.i,G=state.gallery;
+    if(b.dataset.gact==='up')move(G,i,-1);
+    if(b.dataset.gact==='down')move(G,i,1);
+    if(b.dataset.gact==='del'){if(!confirm('Убрать это фото из галереи?'))return;G.splice(i,1);}
+    state.dirtyG=true;render();
+  });
+  $('saveGallery').addEventListener('click',function(){
+    var btn=this;btn.disabled=true;say('Публикую галерею…');
+    getFile('gallery.json').then(function(cur){
+      return putFile('gallery.json',b64encodeUtf8(JSON.stringify(state.gallery,null,2)+'\n'),cur.sha,'Галерея: обновление из админки');
+    }).then(function(j){state.shaG=j.content&&j.content.sha;state.dirtyG=false;render();say('Опубликовано! Сайт обновится через 1–2 минуты');})
+    .catch(function(e){btn.disabled=false;say(e.message,true);});
+  });
+
+  // ---------- вкладки ----------
+  [].forEach.call(document.querySelectorAll('.tabs button'),function(b){
+    b.addEventListener('click',function(){
+      [].forEach.call(document.querySelectorAll('.tabs button'),function(x){x.classList.toggle('active',x===b);});
+      $('tab-products').hidden=b.dataset.tab!=='products';$('tab-gallery').hidden=b.dataset.tab!=='gallery';
+    });
+  });
+
+  // ---------- вход ----------
+  function showApp(on){$('loginView').hidden=on;$('appView').hidden=!on;$('logoutBtn').hidden=!on;}
+  function tryLogin(t,remember){
+    token=t;say('Проверяю токен…');
+    return gh('').then(function(r){
+      if(r.status===404) throw new Error('Репозиторий не найден. Проверь, что токену дан доступ к '+REPO+'.');
+      return r.json();
+    }).then(function(repo){
+      if(!repo.permissions||!repo.permissions.push) throw new Error('У токена нет прав на запись (нужно Contents: Read and write).');
+      var s=store();if(s){if(remember)s.setItem(KEY,t);else s.removeItem(KEY);}
+      showApp(true);return loadAll();
+    }).catch(function(e){token=null;showApp(false);say(e.message,true);});
+  }
+  $('loginForm').addEventListener('submit',function(e){e.preventDefault();var t=$('tokenInput').value.trim();if(t)tryLogin(t,$('rememberInput').checked);});
+  $('logoutBtn').addEventListener('click',function(){var s=store();if(s)s.removeItem(KEY);token=null;$('tokenInput').value='';showApp(false);});
+  window.addEventListener('beforeunload',function(e){if(state.dirtyP||state.dirtyG){e.preventDefault();e.returnValue='';}});
+
+  var saved=store()&&store().getItem(KEY);
+  if(saved)tryLogin(saved,true);else showApp(false);
+})();
+</script>
+</body>
+</html>

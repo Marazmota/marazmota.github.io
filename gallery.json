@@ -1,0 +1,26 @@
+[
+  {
+    "img": "img/nabor.jpg",
+    "caption": "Набор держателей"
+  },
+  {
+    "img": "img/makita-stena.jpg",
+    "caption": "Makita 18V на стене"
+  },
+  {
+    "img": "img/dewalt-akkum.jpg",
+    "caption": "DeWalt 12V"
+  },
+  {
+    "img": "img/makita-doska.jpg",
+    "caption": "Makita 18V"
+  },
+  {
+    "img": "img/dewalt-dva-cveta.jpg",
+    "caption": "Два цвета"
+  },
+  {
+    "img": "img/makita-sverhu.jpg",
+    "caption": "Вид сверху"
+  }
+]
