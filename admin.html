@@ -58,71 +58,60 @@ dialog form{padding:22px}
 .help{color:var(--muted);font-size:13px}
 .help ol{padding-left:20px;margin:8px 0}
 code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var(--line2)}
+
+.steps-box{background:var(--card);border:1px solid var(--line2);border-left:4px solid var(--accent);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.steps-box ol{margin:8px 0 0;padding-left:20px;color:var(--muted)}
+.steps-box li{margin:4px 0}
+.steps-box b{color:var(--text)}
+#pubDialog textarea{min-height:140px;font:12px/1.4 ui-monospace,Consolas,monospace}
 </style>
 </head>
 <body>
 <header>
   <div class="brand"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 2.5 29.6 9.75v14.5L17 31.5 4.4 24.25V9.75Z" fill="none" stroke="#C5F04A" stroke-width="2.2" stroke-linejoin="round"/><path d="M11 12.5h12M10 17h14M11 21.5h12" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg><div>POLYMER<br><small>АДМИНКА</small></div></div>
-  <div style="display:flex;gap:8px"><a class="btn" href="./" target="_blank" rel="noopener">Открыть сайт</a><button class="btn" id="logoutBtn" hidden>Выйти</button></div>
+  <div style="display:flex;gap:8px"><a class="btn" href="./" target="_blank" rel="noopener">Открыть сайт</a></div>
 </header>
 
 <main class="wrap">
+  <div class="tabs">
+    <button class="btn active" data-tab="products">Товары</button>
+    <button class="btn" data-tab="gallery">Галерея</button>
+  </div>
 
-  <!-- Вход -->
-  <section id="loginView" class="card" style="max-width:560px;margin:40px auto" hidden>
-    <h2>Вход</h2>
-    <p class="help">Вход по личному токену GitHub. Токен хранится только в этом браузере и никуда, кроме GitHub, не отправляется.</p>
-    <form id="loginForm">
-      <label for="tokenInput">Токен GitHub</label>
-      <input type="password" id="tokenInput" autocomplete="off" placeholder="github_pat_…" required>
-      <label class="check"><input type="checkbox" id="rememberInput" checked> Запомнить на этом устройстве</label>
-      <div class="dlg-acts"><button class="btn btn-accent" type="submit">Войти</button></div>
-    </form>
-    <details class="help" style="margin-top:16px">
-      <summary style="cursor:pointer;color:var(--text);font-weight:600">Как получить токен</summary>
-      <ol>
-        <li>Открой <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
-        <li>Token name: <code>polymer-admin</code>, Expiration — сколько удобно (например, 1 год)</li>
-        <li>Repository access → <b>Only select repositories</b> → <code>marazmota.github.io</code></li>
-        <li>Permissions → Repository permissions → <b>Contents: Read and write</b></li>
-        <li>Generate token, скопируй и вставь сюда. Никому его не отправляй.</li>
-      </ol>
-    </details>
-  </section>
-
-  <!-- Админка -->
-  <section id="appView" hidden>
-    <div class="tabs">
-      <button class="btn active" data-tab="products">Товары</button>
-      <button class="btn" data-tab="gallery">Галерея</button>
-    </div>
-
-    <div id="tab-products">
-      <div class="bar">
-        <h2>Товары <span class="help" id="pCount"></span></h2>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn" id="addProduct">+ Добавить товар</button>
-          <button class="btn btn-accent" id="saveProducts" disabled>Опубликовать</button>
-        </div>
+  <div id="tab-products">
+    <div class="bar">
+      <h2>Товары <span class="help" id="pCount"></span></h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="addProduct">+ Добавить товар</button>
+        <button class="btn btn-accent" id="saveProducts">Опубликовать</button>
       </div>
-      <p class="help" id="pDirty"></p>
-      <div class="list" id="pList"></div>
     </div>
+    <p class="help" id="pDirty"></p>
+    <div class="list" id="pList"></div>
+  </div>
 
-    <div id="tab-gallery" hidden>
-      <div class="bar">
-        <h2>Галерея <span class="help" id="gCount"></span></h2>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <label class="btn" style="margin:0;color:var(--text)">+ Добавить фото<input type="file" id="gFiles" accept="image/*" multiple hidden></label>
-          <button class="btn btn-accent" id="saveGallery" disabled>Опубликовать</button>
-        </div>
+  <div id="tab-gallery" hidden>
+    <div class="bar">
+      <h2>Галерея <span class="help" id="gCount"></span></h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <label class="btn" style="margin:0;color:var(--text)">+ Добавить фото<input type="file" id="gFiles" accept="image/*" multiple hidden></label>
+        <button class="btn btn-accent" id="saveGallery">Опубликовать</button>
       </div>
-      <p class="help" id="gDirty"></p>
-      <div class="list" id="gList"></div>
     </div>
+    <p class="help" id="gDirty"></p>
+    <div class="list" id="gList"></div>
+  </div>
 
-    <p class="help" style="margin-top:28px">После «Опубликовать» сайт обновляется примерно за 1–2 минуты. Если не видишь изменений — обнови страницу сайта (Ctrl+F5).</p>
-  </section>
+  <details class="steps-box" style="margin-top:28px">
+    <summary style="cursor:pointer;font-weight:700">Как это работает</summary>
+    <ol>
+      <li>Меняешь товары и фото здесь — всё сохраняется как <b>черновик в этом браузере</b>.</li>
+      <li>Новое фото: выбираешь его — админка сожмёт и <b>скачает готовый файл</b>. Его нужно загрузить на GitHub по кнопке «Загрузить фото на GitHub».</li>
+      <li>«Опубликовать» — список копируется, открывается файл на GitHub: <b>Ctrl+A → Ctrl+V → Commit changes</b>.</li>
+      <li>Через 1–2 минуты сайт обновится (Ctrl+F5).</li>
+    </ol>
+    <p class="help" style="margin:10px 0 0">Черновик сбился или хочешь начать заново — <button class="btn" id="resetDraft" style="min-height:32px;padding:4px 10px">Загрузить заново с сайта</button></p>
+  </details>
 </main>
 
 <!-- Редактор товара -->
@@ -145,12 +134,12 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
     <div class="preview">
       <img id="f-preview" alt="" hidden>
       <div style="display:grid;gap:8px">
-        <label class="btn" style="margin:0;color:var(--text)">Загрузить фото<input type="file" id="f-file" accept="image/*" hidden></label>
+        <label class="btn" style="margin:0;color:var(--text)">Выбрать фото<input type="file" id="f-file" accept="image/*" hidden></label>
         <span class="help" id="f-imgstate"></span>
       </div>
     </div>
-    <label for="f-img">или ссылка на фото</label>
-    <input type="text" id="f-img" placeholder="img/… или https://…">
+    <label for="f-img">или ссылка на фото (например, с Авито)</label>
+    <input type="text" id="f-img" placeholder="img/products/… или https://…">
     <label class="check"><input type="checkbox" id="f-hidden"> Скрыть с сайта</label>
     <div class="dlg-acts">
       <button class="btn" type="button" id="pCancel">Отмена</button>
@@ -159,90 +148,83 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
   </form>
 </dialog>
 
+<!-- Публикация -->
+<dialog id="pubDialog">
+  <form method="dialog" style="padding:22px">
+    <h2>Опубликовать <span id="pubWhat"></span></h2>
+    <div class="steps-box" style="margin-top:14px">
+      <b id="pubCopied">Список уже скопирован.</b>
+      <ol id="pubSteps"></ol>
+    </div>
+    <label for="pubText">Если не скопировалось — выдели всё здесь и скопируй (Ctrl+A, Ctrl+C):</label>
+    <textarea id="pubText" readonly></textarea>
+    <div class="dlg-acts">
+      <button class="btn" type="button" id="pubCopy">Скопировать ещё раз</button>
+      <a class="btn" id="pubUpload" target="_blank" rel="noopener" hidden>Загрузить фото на GitHub</a>
+      <a class="btn btn-accent" id="pubOpen" target="_blank" rel="noopener">Открыть файл на GitHub</a>
+      <button class="btn" type="submit">Закрыть</button>
+    </div>
+  </form>
+</dialog>
+
 <div class="status" id="status" role="status" aria-live="polite"></div>
 
 <script>
 (function(){
-  var OWNER='Marazmota', REPO='marazmota.github.io', BRANCH='main';
-  var API='https://api.github.com/repos/'+OWNER+'/'+REPO;
-  var KEY='polymer_admin_token';
-  var token=null;
-  var state={products:[],gallery:[],shaP:null,shaG:null,dirtyP:false,dirtyG:false};
+  var REPO_URL='https://github.com/Marazmota/marazmota.github.io';
+  var BRANCH='main';
+  var DKEY='polymer_admin_draft_v1';
+  var state={products:[],gallery:[],dirtyP:false,dirtyG:false,pendingP:[],pendingG:[]};
   var $=function(id){return document.getElementById(id);};
 
-  // ---------- утилиты ----------
   function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function safeUrl(u){u=String(u||'').trim();return /^(https?:\/\/|img\/)/i.test(u)?u:'';}
   function store(){try{return window.localStorage;}catch(e){return null;}}
   var statusTimer;
-  function say(msg,isErr){var s=$('status');s.textContent=msg;s.className='status'+(isErr?' err':'');s.style.display='block';clearTimeout(statusTimer);statusTimer=setTimeout(function(){s.style.display='none';},isErr?9000:4000);}
-  function b64encodeUtf8(str){var bytes=new TextEncoder().encode(str);var bin='';for(var i=0;i<bytes.length;i+=0x8000){bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+0x8000));}return btoa(bin);}
-  function b64decodeUtf8(b64){var bin=atob(b64.replace(/\n/g,''));var bytes=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return new TextDecoder().decode(bytes);}
+  function say(msg,isErr){var s=$('status');s.textContent=msg;s.className='status'+(isErr?' err':'');s.style.display='block';clearTimeout(statusTimer);statusTimer=setTimeout(function(){s.style.display='none';},isErr?9000:4500);}
   function slug(s){var map={а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'c',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya'};
     return String(s||'').toLowerCase().split('').map(function(c){return map[c]!=null?map[c]:c;}).join('').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)||'item';}
-  function imgSrc(u){u=safeUrl(u);return u;}
 
-  // ---------- GitHub API ----------
-  function gh(path,opts){
-    opts=opts||{};
-    opts.headers=Object.assign({'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},opts.headers||{});
-    return fetch(API+path,opts).then(function(r){
-      if(r.status===401) throw new Error('Токен не подходит или истёк. Выйди и войди с новым токеном.');
-      if(r.status===403) throw new Error('Нет прав на запись. Проверь, что у токена есть Contents: Read and write для '+REPO+'.');
-      if(r.status===409) throw new Error('Файл изменился, пока ты редактировал. Обнови страницу админки и повтори.');
-      if(!r.ok&&r.status!==404) return r.text().then(function(t){throw new Error('Ошибка GitHub '+r.status+': '+t.slice(0,160));});
-      return r;
-    });
-  }
-  function getFile(path){
-    return gh('/contents/'+path+'?ref='+BRANCH+'&t='+Date.now(),{cache:'no-store'}).then(function(r){
-      if(r.status===404) return {sha:null,text:null};
-      return r.json().then(function(j){return {sha:j.sha,text:b64decodeUtf8(j.content||'')};});
-    });
-  }
-  function putFile(path,b64,sha,message){
-    var body={message:message,content:b64,branch:BRANCH};if(sha)body.sha=sha;
-    return gh('/contents/'+path,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();});
+  // ---------- черновик ----------
+  var previews={}; // путь -> dataUrl (только в этой вкладке)
+  function saveDraft(){var s=store();if(!s)return;try{s.setItem(DKEY,JSON.stringify({products:state.products,gallery:state.gallery,dirtyP:state.dirtyP,dirtyG:state.dirtyG,pendingP:state.pendingP,pendingG:state.pendingG}));}catch(e){}}
+  function loadDraft(){var s=store();if(!s)return null;try{return JSON.parse(s.getItem(DKEY)||'null');}catch(e){return null;}}
+  function getJSON(name){return fetch(name+'?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('Не удалось загрузить '+name);return r.json();});}
+  function loadFromSite(){
+    say('Загружаю данные с сайта…');
+    return Promise.all([getJSON('products.json'),getJSON('gallery.json')]).then(function(r){
+      state.products=r[0]||[];state.gallery=r[1]||[];state.dirtyP=state.dirtyG=false;state.pendingP=[];state.pendingG=[];
+      saveDraft();render();say('Готово');
+    }).catch(function(e){say(e.message,true);});
   }
 
-  // ---------- картинки ----------
-  function resizeToJpegB64(file,max){
+  // ---------- фото: сжать и скачать ----------
+  function compress(file,max){
     return new Promise(function(resolve,reject){
       var url=URL.createObjectURL(file);var img=new Image();
       img.onload=function(){
         var w=img.naturalWidth,h=img.naturalHeight,k=Math.min(1,max/Math.max(w,h));
         var c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);
         var ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);
-        URL.revokeObjectURL(url);
-        var data=c.toDataURL('image/jpeg',0.85);
-        resolve({b64:data.split(',')[1],dataUrl:data});
+        URL.revokeObjectURL(url);resolve(c.toDataURL('image/jpeg',0.85));
       };
       img.onerror=function(){URL.revokeObjectURL(url);reject(new Error('Не получилось открыть фото. Попробуй JPG или PNG.'));};
       img.src=url;
     });
   }
-  function uploadImage(file,folder,name){
-    return resizeToJpegB64(file,1400).then(function(res){
-      var path='img/'+folder+'/'+slug(name)+'-'+Date.now()+'.jpg';
-      return putFile(path,res.b64,null,'Фото: '+path).then(function(){return {path:path,dataUrl:res.dataUrl};});
-    });
-  }
-  var localPreviews={}; // путь -> dataUrl, пока сайт не пересобрался
-
-  // ---------- загрузка данных ----------
-  function loadAll(){
-    say('Загружаю данные…');
-    return Promise.all([getFile('products.json'),getFile('gallery.json')]).then(function(r){
-      state.shaP=r[0].sha;state.shaG=r[1].sha;
-      state.products=r[0].text?JSON.parse(r[0].text):[];
-      state.gallery=r[1].text?JSON.parse(r[1].text):[];
-      state.dirtyP=state.dirtyG=false;
-      render();say('Готово');
+  function download(dataUrl,name){var a=document.createElement('a');a.href=dataUrl;a.download=name;document.body.appendChild(a);a.click();a.remove();}
+  function preparePhoto(file,folder,base){
+    return compress(file,1400).then(function(dataUrl){
+      var name=slug(base)+'-'+Date.now().toString(36)+'.jpg';
+      var path='img/'+folder+'/'+name;
+      previews[path]=dataUrl;download(dataUrl,name);
+      return {path:path,name:name};
     });
   }
 
   // ---------- отрисовка ----------
-  function thumb(u){var src=localPreviews[u]||imgSrc(u);return src?'<img class="thumb" src="'+esc(src)+'" alt="" referrerpolicy="no-referrer" loading="lazy">':'<div class="thumb"></div>';}
+  function thumb(u){var src=previews[u]||safeUrl(u);return src?'<img class="thumb" src="'+esc(src)+'" alt="" referrerpolicy="no-referrer" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<div class="thumb"></div>';}
+  function pendingNote(list){return list.length?'<br>Не забудь загрузить на GitHub файлы: <b>'+list.map(function(p){return esc(p.split('/').pop());}).join(', ')+'</b>':'';}
   function render(){
     var P=state.products;
     $('pCount').textContent='('+P.length+')';
@@ -250,14 +232,13 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
       return '<div class="item'+(p.hidden?' hidden-item':'')+'">'+thumb(p.img)+
         '<div><h3>'+esc(p.title)+(p.tag?'<span class="badge">'+esc(p.tag)+'</span>':'')+(p.hidden?'<span class="badge">скрыт</span>':'')+'</h3><p>'+esc(p.price)+(p.unit?' · '+esc(p.unit):'')+'</p></div>'+
         '<div class="acts">'+
-        '<button class="btn btn-icon" data-act="up" data-i="'+i+'" title="Выше" aria-label="Выше"'+(i===0?' disabled':'')+'>↑</button>'+
-        '<button class="btn btn-icon" data-act="down" data-i="'+i+'" title="Ниже" aria-label="Ниже"'+(i===P.length-1?' disabled':'')+'>↓</button>'+
+        '<button class="btn btn-icon" data-act="up" data-i="'+i+'" aria-label="Выше"'+(i===0?' disabled':'')+'>↑</button>'+
+        '<button class="btn btn-icon" data-act="down" data-i="'+i+'" aria-label="Ниже"'+(i===P.length-1?' disabled':'')+'>↓</button>'+
         '<button class="btn" data-act="hide" data-i="'+i+'">'+(p.hidden?'Показать':'Скрыть')+'</button>'+
         '<button class="btn" data-act="edit" data-i="'+i+'">Изменить</button>'+
         '<button class="btn btn-danger" data-act="del" data-i="'+i+'">Удалить</button></div></div>';
     }).join(''):'<p class="help">Товаров пока нет. Нажми «Добавить товар».</p>';
-    $('saveProducts').disabled=!state.dirtyP;
-    $('pDirty').innerHTML=state.dirtyP?'<span class="dirty">Есть неопубликованные изменения</span>':'';
+    $('pDirty').innerHTML=state.dirtyP?'<span class="dirty">Есть неопубликованные изменения</span>'+pendingNote(state.pendingP):'';
 
     var G=state.gallery;
     $('gCount').textContent='('+G.length+')';
@@ -269,45 +250,41 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
         '<button class="btn btn-icon" data-gact="down" data-i="'+i+'" aria-label="Ниже"'+(i===G.length-1?' disabled':'')+'>↓</button>'+
         '<button class="btn btn-danger" data-gact="del" data-i="'+i+'">Удалить</button></div></div>';
     }).join(''):'<p class="help">В галерее пока нет фото.</p>';
-    $('saveGallery').disabled=!state.dirtyG;
-    $('gDirty').innerHTML=state.dirtyG?'<span class="dirty">Есть неопубликованные изменения</span>':'';
+    $('gDirty').innerHTML=state.dirtyG?'<span class="dirty">Есть неопубликованные изменения</span>'+pendingNote(state.pendingG):'';
   }
+  function changed(kind){if(kind==='p')state.dirtyP=true;else state.dirtyG=true;saveDraft();render();}
   function move(arr,i,d){var j=i+d;if(j<0||j>=arr.length)return;var t=arr[i];arr[i]=arr[j];arr[j]=t;}
 
   // ---------- товары ----------
-  var editing=-1, pendingImg=null;
+  var editing=-1,newImg=null;
+  function setPreview(u){var src=previews[u]||safeUrl(u);var im=$('f-preview');if(src){im.src=src;im.referrerPolicy='no-referrer';im.hidden=false;}else{im.hidden=true;}}
   function openEditor(i){
-    editing=i;var p=i>=0?state.products[i]:{title:'',text:'',price:'',unit:'',tag:'',img:'',avito:'',hidden:false};
+    editing=i;newImg=null;var p=i>=0?state.products[i]:{title:'',text:'',price:'',unit:'',tag:'',img:'',avito:'',hidden:false};
     $('pDialogTitle').textContent=i>=0?'Изменить товар':'Новый товар';
     $('f-title').value=p.title||'';$('f-text').value=p.text||'';$('f-price').value=p.price||'';$('f-unit').value=p.unit||'';
     $('f-tag').value=p.tag||'';$('f-avito').value=p.avito||'';$('f-img').value=p.img||'';$('f-hidden').checked=!!p.hidden;
-    $('f-file').value='';$('f-imgstate').textContent='';
-    setPreview(p.img);
-    $('pDialog').showModal();
+    $('f-file').value='';$('f-imgstate').textContent='';setPreview(p.img);$('pDialog').showModal();
   }
-  function setPreview(u){var src=localPreviews[u]||imgSrc(u);var im=$('f-preview');if(src){im.src=src;im.referrerPolicy='no-referrer';im.hidden=false;}else{im.hidden=true;}}
   $('f-img').addEventListener('input',function(){setPreview(this.value);});
   $('f-file').addEventListener('change',function(){
     var f=this.files&&this.files[0];if(!f)return;
-    $('f-imgstate').textContent='Загружаю фото…';$('pOk').disabled=true;
-    uploadImage(f,'products',$('f-title').value||'tovar').then(function(r){
-      localPreviews[r.path]=r.dataUrl;$('f-img').value=r.path;setPreview(r.path);
-      $('f-imgstate').textContent='Фото загружено';
-    }).catch(function(e){$('f-imgstate').textContent='';say(e.message,true);}).then(function(){$('pOk').disabled=false;});
+    preparePhoto(f,'products',$('f-title').value||'tovar').then(function(r){
+      newImg=r.path;$('f-img').value=r.path;setPreview(r.path);
+      $('f-imgstate').innerHTML='Файл <b>'+esc(r.name)+'</b> скачан — загрузишь его при публикации';
+    }).catch(function(e){say(e.message,true);});
   });
   $('pCancel').addEventListener('click',function(){$('pDialog').close();});
   $('pForm').addEventListener('submit',function(e){
     e.preventDefault();
-    var title=$('f-title').value.trim(),price=$('f-price').value.trim();
+    var title=$('f-title').value.trim(),price=$('f-price').value.trim(),avito=$('f-avito').value.trim(),img=$('f-img').value.trim();
     if(!title||!price){say('Заполни название и цену',true);return;}
-    var avito=$('f-avito').value.trim(), img=$('f-img').value.trim();
     if(avito&&!/^https?:\/\//i.test(avito)){say('Ссылка на Авито должна начинаться с https://',true);return;}
     if(img&&!safeUrl(img)){say('Ссылка на фото должна начинаться с https:// или img/',true);return;}
     var p={id:editing>=0?(state.products[editing].id||slug(title)):slug(title)+'-'+Date.now().toString(36),
-      title:title,text:$('f-text').value.trim(),price:price,unit:$('f-unit').value.trim(),tag:$('f-tag').value.trim(),
-      img:img,avito:avito,hidden:$('f-hidden').checked};
+      title:title,text:$('f-text').value.trim(),price:price,unit:$('f-unit').value.trim(),tag:$('f-tag').value.trim(),img:img,avito:avito,hidden:$('f-hidden').checked};
     if(editing>=0)state.products[editing]=p;else state.products.unshift(p);
-    state.dirtyP=true;$('pDialog').close();render();say('Изменения сохранены в черновике — нажми «Опубликовать»');
+    if(newImg&&img===newImg)state.pendingP.push(newImg);
+    $('pDialog').close();changed('p');say('Сохранено в черновик — когда закончишь, нажми «Опубликовать»');
   });
   $('addProduct').addEventListener('click',function(){openEditor(-1);});
   $('pList').addEventListener('click',function(e){
@@ -317,40 +294,68 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
     if(b.dataset.act==='down')move(P,i,1);
     if(b.dataset.act==='hide')P[i].hidden=!P[i].hidden;
     if(b.dataset.act==='del'){if(!confirm('Удалить «'+P[i].title+'»?'))return;P.splice(i,1);}
-    state.dirtyP=true;render();
-  });
-  $('saveProducts').addEventListener('click',function(){
-    var btn=this;btn.disabled=true;say('Публикую товары…');
-    getFile('products.json').then(function(cur){
-      return putFile('products.json',b64encodeUtf8(JSON.stringify(state.products,null,2)+'\n'),cur.sha,'Товары: обновление из админки');
-    }).then(function(j){state.shaP=j.content&&j.content.sha;state.dirtyP=false;render();say('Опубликовано! Сайт обновится через 1–2 минуты');})
-    .catch(function(e){btn.disabled=false;say(e.message,true);});
+    changed('p');
   });
 
   // ---------- галерея ----------
   $('gFiles').addEventListener('change',function(){
     var files=[].slice.call(this.files||[]);this.value='';if(!files.length)return;
-    var chain=Promise.resolve(),n=0;
-    files.forEach(function(f){chain=chain.then(function(){
-      say('Загружаю фото '+(++n)+' из '+files.length+'…');
-      return uploadImage(f,'gallery','foto').then(function(r){localPreviews[r.path]=r.dataUrl;state.gallery.unshift({img:r.path,caption:''});state.dirtyG=true;render();});
-    });});
-    chain.then(function(){say('Фото загружены — добавь подписи и нажми «Опубликовать»');}).catch(function(e){say(e.message,true);});
+    var chain=Promise.resolve();
+    files.forEach(function(f){chain=chain.then(function(){return preparePhoto(f,'gallery','foto').then(function(r){state.gallery.unshift({img:r.path,caption:''});state.pendingG.push(r.path);});});});
+    chain.then(function(){changed('g');say('Фото скачаны — подпиши их и нажми «Опубликовать»');}).catch(function(e){say(e.message,true);});
   });
-  $('gList').addEventListener('input',function(e){var t=e.target;if(t.dataset.cap==null)return;state.gallery[+t.dataset.cap].caption=t.value;if(!state.dirtyG){state.dirtyG=true;$('saveGallery').disabled=false;$('gDirty').innerHTML='<span class="dirty">Есть неопубликованные изменения</span>';}});
+  $('gList').addEventListener('change',function(e){var t=e.target;if(t.dataset.cap==null)return;state.gallery[+t.dataset.cap].caption=t.value.trim();changed('g');});
   $('gList').addEventListener('click',function(e){
     var b=e.target.closest('button[data-gact]');if(!b)return;var i=+b.dataset.i,G=state.gallery;
     if(b.dataset.gact==='up')move(G,i,-1);
     if(b.dataset.gact==='down')move(G,i,1);
     if(b.dataset.gact==='del'){if(!confirm('Убрать это фото из галереи?'))return;G.splice(i,1);}
-    state.dirtyG=true;render();
+    changed('g');
   });
-  $('saveGallery').addEventListener('click',function(){
-    var btn=this;btn.disabled=true;say('Публикую галерею…');
-    getFile('gallery.json').then(function(cur){
-      return putFile('gallery.json',b64encodeUtf8(JSON.stringify(state.gallery,null,2)+'\n'),cur.sha,'Галерея: обновление из админки');
-    }).then(function(j){state.shaG=j.content&&j.content.sha;state.dirtyG=false;render();say('Опубликовано! Сайт обновится через 1–2 минуты');})
-    .catch(function(e){btn.disabled=false;say(e.message,true);});
+
+  // ---------- публикация ----------
+  var pubKind=null;
+  function copyText(t){
+    if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t).then(function(){return true;},function(){return fallbackCopy();});
+    return Promise.resolve(fallbackCopy());
+  }
+  function fallbackCopy(){var ta=$('pubText');ta.focus();ta.select();try{return document.execCommand('copy');}catch(e){return false;}}
+  function publish(kind){
+    pubKind=kind;
+    var file=kind==='p'?'products.json':'gallery.json';
+    var data=kind==='p'?state.products:state.gallery;
+    var pending=kind==='p'?state.pendingP:state.pendingG;
+    var folder=kind==='p'?'img/products':'img/gallery';
+    var text=JSON.stringify(data,null,2)+'\n';
+    $('pubWhat').textContent=kind==='p'?'товары':'галерею';
+    $('pubText').value=text;
+    $('pubOpen').href=REPO_URL+'/edit/'+BRANCH+'/'+file;
+    var steps=[];
+    if(pending.length){
+      $('pubUpload').hidden=false;$('pubUpload').href=REPO_URL+'/upload/'+BRANCH+'/'+folder;
+      steps.push('Сначала нажми <b>«Загрузить фото на GitHub»</b>, перетащи туда файлы из «Загрузок»: <b>'+pending.map(function(p){return esc(p.split('/').pop());}).join(', ')+'</b> и нажми <b>Commit changes</b>.');
+    } else $('pubUpload').hidden=true;
+    steps.push('Нажми <b>«Открыть файл на GitHub»</b>.');
+    steps.push('Кликни в текст файла, нажми <b>Ctrl+A</b>, потом <b>Ctrl+V</b>.');
+    steps.push('Нажми зелёную <b>Commit changes…</b> и в окне ещё раз <b>Commit changes</b>.');
+    steps.push('Через 1–2 минуты обнови сайт (Ctrl+F5) и вернись сюда — нажми <b>«Готово, опубликовал»</b>.');
+    $('pubSteps').innerHTML=steps.map(function(s){return '<li>'+s+'</li>';}).join('');
+    $('pubDialog').showModal();
+    copyText(text).then(function(ok){$('pubCopied').textContent=ok?'Список уже скопирован.':'Скопируй список из поля ниже.';});
+  }
+  $('pubCopy').addEventListener('click',function(){copyText($('pubText').value).then(function(ok){say(ok?'Скопировано':'Выдели текст в поле и нажми Ctrl+C',!ok);});});
+  $('saveProducts').addEventListener('click',function(){publish('p');});
+  $('saveGallery').addEventListener('click',function(){publish('g');});
+  // кнопка «готово» в окне публикации
+  var doneBtn=document.createElement('button');doneBtn.type='button';doneBtn.className='btn';doneBtn.textContent='Готово, опубликовал';
+  $('pubDialog').querySelector('.dlg-acts').insertBefore(doneBtn,$('pubDialog').querySelector('.dlg-acts button[type=submit]'));
+  doneBtn.addEventListener('click',function(){
+    if(pubKind==='p'){state.dirtyP=false;state.pendingP=[];}else{state.dirtyG=false;state.pendingG=[];}
+    saveDraft();render();$('pubDialog').close();say('Отлично! Сайт обновится через 1–2 минуты');
+  });
+  $('resetDraft').addEventListener('click',function(){
+    if((state.dirtyP||state.dirtyG)&&!confirm('Неопубликованные изменения пропадут. Загрузить заново с сайта?'))return;
+    loadFromSite();
   });
 
   // ---------- вкладки ----------
@@ -361,25 +366,12 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
     });
   });
 
-  // ---------- вход ----------
-  function showApp(on){$('loginView').hidden=on;$('appView').hidden=!on;$('logoutBtn').hidden=!on;}
-  function tryLogin(t,remember){
-    token=t;say('Проверяю токен…');
-    return gh('').then(function(r){
-      if(r.status===404) throw new Error('Репозиторий не найден. Проверь, что токену дан доступ к '+REPO+'.');
-      return r.json();
-    }).then(function(repo){
-      if(!repo.permissions||!repo.permissions.push) throw new Error('У токена нет прав на запись (нужно Contents: Read and write).');
-      var s=store();if(s){if(remember)s.setItem(KEY,t);else s.removeItem(KEY);}
-      showApp(true);return loadAll();
-    }).catch(function(e){token=null;showApp(false);say(e.message,true);});
-  }
-  $('loginForm').addEventListener('submit',function(e){e.preventDefault();var t=$('tokenInput').value.trim();if(t)tryLogin(t,$('rememberInput').checked);});
-  $('logoutBtn').addEventListener('click',function(){var s=store();if(s)s.removeItem(KEY);token=null;$('tokenInput').value='';showApp(false);});
-  window.addEventListener('beforeunload',function(e){if(state.dirtyP||state.dirtyG){e.preventDefault();e.returnValue='';}});
-
-  var saved=store()&&store().getItem(KEY);
-  if(saved)tryLogin(saved,true);else showApp(false);
+  // ---------- старт ----------
+  var d=loadDraft();
+  if(d&&(d.dirtyP||d.dirtyG)){
+    state.products=d.products||[];state.gallery=d.gallery||[];state.dirtyP=!!d.dirtyP;state.dirtyG=!!d.dirtyG;state.pendingP=d.pendingP||[];state.pendingG=d.pendingG||[];
+    render();say('Открыт неопубликованный черновик');
+  } else loadFromSite();
 })();
 </script>
 </body>
