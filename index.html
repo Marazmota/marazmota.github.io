@@ -446,6 +446,19 @@ body.lb-lock{overflow:hidden}
 .faq details[open] summary::after{transform:rotate(45deg)}
 .faq details p{color:var(--muted);font-size:15.5px;padding:0 0 18px}
 @media (min-width:768px){.sticky-bar{display:none}}
+/* Отзывы — бегущая строка */
+.marquee{overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent)}
+.marquee-track{display:flex;gap:16px;width:max-content;padding:4px 0;animation:marquee var(--mq-dur,40s) linear infinite}
+.marquee:hover .marquee-track,.marquee:focus-within .marquee-track{animation-play-state:paused}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 8px))}}
+.rv{margin:0;width:320px;flex:none;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.rv-stars{color:var(--accent);letter-spacing:2px;font-size:18px}
+.rv p{color:var(--text);font-size:15.5px;line-height:1.5}
+.rv-who{margin-top:auto;color:var(--muted);font-size:13.5px}
+.rv-who b{color:var(--text);font-weight:700}
+.reviews-link{margin-top:20px}
+@media (min-width:768px){.rv{width:360px}}
+@media (prefers-reduced-motion:reduce){.marquee{overflow-x:auto}.marquee-track{animation:none}}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -716,6 +729,21 @@ body.lb-lock{overflow:hidden}
   </div>
 </section>
 
+<!-- ===== Отзывы ===== -->
+<section class="section reviews-sec" id="reviews" hidden>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="kicker"><span class="nozzle" aria-hidden="true"></span>Отзывы</p>
+      <h2>Что говорят покупатели</h2>
+      <p>Настоящие отзывы с моего профиля на Авито.</p>
+    </div>
+  </div>
+  <div class="marquee" aria-label="Отзывы покупателей">
+    <div class="marquee-track" id="reviewsTrack"></div>
+  </div>
+  <div class="wrap"><a class="btn btn-outline btn-sm reviews-link" href="https://www.avito.ru/brands/c37210f27ba19f5a4cb4e5c044a017b8" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-ext"/></svg>Все отзывы на Авито</a></div>
+</section>
+
 <!-- ===== 5. Цены и заказ ===== -->
 <section class="section" id="prices">
   <div class="wrap">
@@ -867,6 +895,20 @@ body.lb-lock{overflow:hidden}
   function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function safeUrl(u){u=String(u||'').trim();return /^(https?:\/\/|img\/)/i.test(u)?u:'';}
   function getJSON(name){return fetch(name+'?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();});}
+
+  // Отзывы с Авито — бегущая строка (reviews.json, редактируется в admin.html)
+  var rs=document.getElementById('reviews'), rt=document.getElementById('reviewsTrack');
+  if(rs&&rt) getJSON('reviews.json').then(function(list){
+    list=(list||[]).filter(function(r){return r&&r.text;});
+    if(!list.length) return;
+    var one=list.map(function(r){var n=Math.max(1,Math.min(5,+r.stars||5));
+      return '<figure class="rv"><div class="rv-stars" aria-label="Оценка '+n+' из 5">'+'★★★★★'.slice(0,n)+'</div><p>'+esc(r.text)+'</p><figcaption class="rv-who"><b>'+esc(r.name)+'</b>'+(r.item?' · '+esc(r.item):'')+(r.date?'<br>'+esc(r.date):'')+'</figcaption></figure>';}).join('');
+    while(list.length<6&&one.length&&(one.split('<figure').length-1)<6) one+=one; // чтобы строка была длинной
+    rt.innerHTML=one+one.replace(/<figure class="rv"/g,'<figure class="rv" aria-hidden="true"');
+    rt.style.setProperty('--mq-dur',Math.max(25,(one.split('<figure').length-1)*7)+'s');
+    rs.hidden=false;
+  }).catch(function(){});
+
   var pg=document.getElementById('productGrid');
   if(pg) getJSON('products.json').then(function(list){
     var items=(list||[]).filter(function(p){return !p.hidden;});

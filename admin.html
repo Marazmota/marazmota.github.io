@@ -87,6 +87,7 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
   <div class="tabs">
     <button class="btn active" data-tab="products">Товары</button>
     <button class="btn" data-tab="gallery">Галерея</button>
+    <button class="btn" data-tab="reviews">Отзывы</button>
     <button class="btn" data-tab="stats">Посещения</button>
   </div>
 
@@ -114,6 +115,32 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
     <div class="list" id="gList"></div>
   </div>
 
+
+  <div id="tab-reviews" hidden>
+    <div class="bar">
+      <h2>Отзывы <span class="help" id="rCount"></span></h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="addReview">+ Добавить отзыв</button>
+        <button class="btn btn-accent" id="saveReviews">Опубликовать</button>
+      </div>
+    </div>
+    <p class="help">Переноси сюда только настоящие отзывы со своего профиля на Авито — слово в слово. На сайте они идут бегущей строкой.</p>
+    <p class="help" id="rDirty"></p>
+    <form id="rForm" class="card" hidden style="margin:12px 0">
+      <div class="row row-2">
+        <div><label for="r-name">Имя покупателя *</label><input type="text" id="r-name" maxlength="40" required></div>
+        <div><label for="r-date">Дата</label><input type="text" id="r-date" maxlength="30" placeholder="12 ноября 2026"></div>
+      </div>
+      <div class="row row-2">
+        <div><label for="r-item">Что покупал</label><input type="text" id="r-item" maxlength="80" placeholder="Держатели аккумуляторов"></div>
+        <div><label for="r-stars">Оценка</label><select id="r-stars" style="width:100%;background:var(--bg);color:var(--text);border:1.5px solid var(--line2);border-radius:10px;padding:10px 12px;font:inherit"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
+      </div>
+      <label for="r-text">Текст отзыва *</label>
+      <textarea id="r-text" maxlength="500" required></textarea>
+      <div class="dlg-acts"><button class="btn" type="button" id="rCancel">Отмена</button><button class="btn btn-accent" type="submit">Готово</button></div>
+    </form>
+    <div class="list" id="rList"></div>
+  </div>
 
   <div id="tab-stats" hidden>
     <div class="bar"><h2>Посещения сайта</h2><button class="btn" id="statsReload">Обновить</button></div>
@@ -351,12 +378,12 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
   function fallbackCopy(){var ta=$('pubText');ta.focus();ta.select();try{return document.execCommand('copy');}catch(e){return false;}}
   function publish(kind){
     pubKind=kind;
-    var file=kind==='p'?'products.json':'gallery.json';
-    var data=kind==='p'?state.products:state.gallery;
-    var pending=kind==='p'?state.pendingP:state.pendingG;
+    var file=kind==='p'?'products.json':kind==='r'?'reviews.json':'gallery.json';
+    var data=kind==='p'?state.products:kind==='r'?rv.list:state.gallery;
+    var pending=kind==='p'?state.pendingP:kind==='r'?[]:state.pendingG;
     var folder=kind==='p'?'img/products':'img/gallery';
     var text=JSON.stringify(data,null,2)+'\n';
-    $('pubWhat').textContent=kind==='p'?'товары':'галерею';
+    $('pubWhat').textContent=kind==='p'?'товары':kind==='r'?'отзывы':'галерею';
     $('pubText').value=text;
     $('pubOpen').href=REPO_URL+'/edit/'+BRANCH+'/'+file;
     var steps=[];
@@ -379,7 +406,7 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
   var doneBtn=document.createElement('button');doneBtn.type='button';doneBtn.className='btn';doneBtn.textContent='Готово, опубликовал';
   $('pubDialog').querySelector('.dlg-acts').insertBefore(doneBtn,$('pubDialog').querySelector('.dlg-acts button[type=submit]'));
   doneBtn.addEventListener('click',function(){
-    if(pubKind==='p'){state.dirtyP=false;state.pendingP=[];}else{state.dirtyG=false;state.pendingG=[];}
+    if(pubKind==='r'){rv.dirty=false;rvSave();rvRender();}else if(pubKind==='p'){state.dirtyP=false;state.pendingP=[];}else{state.dirtyG=false;state.pendingG=[];}
     saveDraft();render();$('pubDialog').close();say('Отлично! Сайт обновится через 1–2 минуты');
   });
   $('resetDraft').addEventListener('click',function(){
@@ -414,11 +441,46 @@ code{background:var(--bg);padding:1px 6px;border-radius:5px;border:1px solid var
   }
   $('statsReload').addEventListener('click',loadStats);
 
+
+  // ---------- отзывы ----------
+  var RKEY='polymer_admin_reviews_v1';
+  var rv={list:[],dirty:false,editing:-1};
+  function rvSave(){var s=store();if(s)try{s.setItem(RKEY,JSON.stringify({list:rv.list,dirty:rv.dirty}));}catch(e){}}
+  function stars(n){n=+n||5;return '★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);}
+  function rvRender(){
+    $('rCount').textContent='('+rv.list.length+')';
+    $('rList').innerHTML=rv.list.length?rv.list.map(function(r,i){
+      return '<div class="item" style="grid-template-columns:1fr auto"><div><h3>'+esc(r.name)+' <span class="badge" style="color:var(--accent)">'+stars(r.stars)+'</span></h3><p>'+esc(r.text)+'</p>'+(r.item||r.date?'<p style="margin-top:4px">'+esc([r.item,r.date].filter(Boolean).join(' · '))+'</p>':'')+'</div>'+
+      '<div class="acts"><button class="btn btn-icon" data-ract="up" data-i="'+i+'" aria-label="Выше"'+(i===0?' disabled':'')+'>↑</button><button class="btn btn-icon" data-ract="down" data-i="'+i+'" aria-label="Ниже"'+(i===rv.list.length-1?' disabled':'')+'>↓</button><button class="btn" data-ract="edit" data-i="'+i+'">Изменить</button><button class="btn btn-danger" data-ract="del" data-i="'+i+'">Удалить</button></div></div>';
+    }).join(''):'<p class="help">Отзывов пока нет. Нажми «Добавить отзыв». Пока список пуст, блок отзывов на сайте скрыт.</p>';
+    $('rDirty').innerHTML=rv.dirty?'<span class="dirty">Есть неопубликованные изменения</span>':'';
+  }
+  function rvOpen(i){rv.editing=i;var r=i>=0?rv.list[i]:{name:'',date:'',item:'',stars:5,text:''};
+    $('r-name').value=r.name||'';$('r-date').value=r.date||'';$('r-item').value=r.item||'';$('r-stars').value=String(r.stars||5);$('r-text').value=r.text||'';
+    $('rForm').hidden=false;$('r-name').focus();}
+  $('addReview').addEventListener('click',function(){rvOpen(-1);});
+  $('rCancel').addEventListener('click',function(){$('rForm').hidden=true;});
+  $('rForm').addEventListener('submit',function(e){e.preventDefault();
+    var r={name:$('r-name').value.trim(),date:$('r-date').value.trim(),item:$('r-item').value.trim(),stars:+$('r-stars').value,text:$('r-text').value.trim()};
+    if(!r.name||!r.text){say('Заполни имя и текст',true);return;}
+    if(rv.editing>=0)rv.list[rv.editing]=r;else rv.list.unshift(r);
+    rv.dirty=true;rvSave();rvRender();$('rForm').hidden=true;say('Сохранено в черновик — нажми «Опубликовать»');});
+  $('rList').addEventListener('click',function(e){var b=e.target.closest('button[data-ract]');if(!b)return;var i=+b.dataset.i,L=rv.list;
+    if(b.dataset.ract==='edit')return rvOpen(i);
+    if(b.dataset.ract==='up')move(L,i,-1);
+    if(b.dataset.ract==='down')move(L,i,1);
+    if(b.dataset.ract==='del'){if(!armed(b))return;L.splice(i,1);}
+    rv.dirty=true;rvSave();rvRender();});
+  $('saveReviews').addEventListener('click',function(){publish('r');});
+  (function(){var s=store(),d=null;try{d=s&&JSON.parse(s.getItem(RKEY)||'null');}catch(e){}
+    if(d&&d.dirty){rv.list=d.list||[];rv.dirty=true;rvRender();}
+    else getJSON('reviews.json').then(function(l){rv.list=l||[];rv.dirty=false;rvSave();rvRender();}).catch(function(){rvRender();});})();
+
   // ---------- вкладки ----------
   [].forEach.call(document.querySelectorAll('.tabs button'),function(b){
     b.addEventListener('click',function(){
       [].forEach.call(document.querySelectorAll('.tabs button'),function(x){x.classList.toggle('active',x===b);});
-      $('tab-products').hidden=b.dataset.tab!=='products';$('tab-gallery').hidden=b.dataset.tab!=='gallery';$('tab-stats').hidden=b.dataset.tab!=='stats';if(b.dataset.tab==='stats'&&!statsLoaded)loadStats();
+      $('tab-products').hidden=b.dataset.tab!=='products';$('tab-gallery').hidden=b.dataset.tab!=='gallery';$('tab-stats').hidden=b.dataset.tab!=='stats';$('tab-reviews').hidden=b.dataset.tab!=='reviews';if(b.dataset.tab==='stats'&&!statsLoaded)loadStats();
     });
   });
 
