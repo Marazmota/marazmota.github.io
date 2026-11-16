@@ -451,11 +451,16 @@ body.lb-lock{overflow:hidden}
 .marquee-track{display:flex;gap:16px;width:max-content;padding:4px 0;animation:marquee var(--mq-dur,40s) linear infinite}
 .marquee:hover .marquee-track,.marquee:focus-within .marquee-track{animation-play-state:paused}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 8px))}}
-.rv{margin:0;width:320px;flex:none;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px}
-.rv-stars{color:var(--accent);letter-spacing:2px;font-size:18px}
-.rv p{color:var(--text);font-size:15.5px;line-height:1.5}
-.rv-who{margin-top:auto;color:var(--muted);font-size:13.5px}
-.rv-who b{color:var(--text);font-weight:700}
+.rv{margin:0;width:320px;flex:none;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.rv-head{display:flex;align-items:center;gap:12px}
+.rv-ava{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 18px/1 "Unbounded",sans-serif;color:#0E0F12;flex:none}
+.rv-who{display:flex;flex-direction:column;line-height:1.25}
+.rv-who b{font-weight:700;font-size:15.5px}
+.rv-who small{color:var(--muted);font-size:13px}
+.rv-stars{color:var(--accent);letter-spacing:2px;font-size:17px;display:flex;align-items:center;gap:10px}
+.rv-stars span{letter-spacing:0;font-size:13px;color:var(--muted)}
+.rv p{color:var(--text);font-size:15.5px;line-height:1.5;margin:0}
+.rv-item{margin-top:auto;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:10px}
 .reviews-link{margin-top:20px}
 @media (min-width:768px){.rv{width:360px}}
 @media (prefers-reduced-motion:reduce){.marquee{overflow-x:auto}.marquee-track{animation:none}}
@@ -901,8 +906,11 @@ body.lb-lock{overflow:hidden}
   if(rs&&rt) getJSON('reviews.json').then(function(list){
     list=(list||[]).filter(function(r){return r&&r.text;});
     if(!list.length) return;
-    var one=list.map(function(r){var n=Math.max(1,Math.min(5,+r.stars||5));
-      return '<figure class="rv"><div class="rv-stars" aria-label="Оценка '+n+' из 5">'+'★★★★★'.slice(0,n)+'</div><p>'+esc(r.text)+'</p><figcaption class="rv-who"><b>'+esc(r.name)+'</b>'+(r.item?' · '+esc(r.item):'')+(r.date?'<br>'+esc(r.date):'')+'</figcaption></figure>';}).join('');
+    var cols=['#C5F04A','#4FC3F7','#FFB74D','#BA68C8','#4DD0A0','#FF8A80'];
+    var one=list.map(function(r,i){var n=Math.max(1,Math.min(5,+r.stars||5)),nm=String(r.name||'Покупатель');
+      return '<figure class="rv"><div class="rv-head"><span class="rv-ava" style="background:'+cols[i%cols.length]+'">'+esc(nm.charAt(0).toUpperCase())+'</span><span class="rv-who"><b>'+esc(nm)+'</b>'+(r.date?'<small>'+esc(r.date)+'</small>':'')+'</span></div>'+
+        '<div class="rv-stars" aria-label="Оценка '+n+' из 5">'+'★★★★★'.slice(0,n)+'<span>Сделка состоялась</span></div>'+
+        '<p>'+esc(r.text)+'</p>'+(r.item?'<div class="rv-item">'+esc(r.item)+'</div>':'')+'</figure>';}).join('');
     while(list.length<6&&one.length&&(one.split('<figure').length-1)<6) one+=one; // чтобы строка была длинной
     rt.innerHTML=one+one.replace(/<figure class="rv"/g,'<figure class="rv" aria-hidden="true"');
     rt.style.setProperty('--mq-dur',Math.max(25,(one.split('<figure').length-1)*7)+'s');
