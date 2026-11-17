@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>POLYMER 3D LAB — 3D-печать и моделирование в Набережных Челнах</title>
 <meta name="description" content="3D-печать и моделирование на заказ в Набережных Челнах. Сломанные пластиковые детали по образцу, чертежу или вашему файлу: бытовая техника, авто, мебель. Держатели аккумуляторов Makita и DeWalt. От 300 ₽.">
-<meta name="theme-color" content="#ECE9E1">
+<meta name="theme-color" content="#E4E0D6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131517" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
 <meta name="yandex-verification" content="e2af40dd7d9f23cd">
 <meta property="og:type" content="website">
 <meta property="og:title" content="POLYMER 3D LAB — 3D-печать в Набережных Челнах">
@@ -46,16 +48,20 @@
    Бумага, тушь и один сигнальный цвет — как на чертёжном листе.
    ===================================================================== */
 :root{
-  /* цвета */
-  --paper:#ECE9E1;      /* фон: тёплая чертёжная бумага */
-  --paper-2:#E2DED3;    /* фон второго плана */
-  --paper-3:#D6D1C4;    /* линии сетки, плашки */
-  --ink:#1B1E21;        /* основной: тушь */
+  /* цвета: светлая тема — бумага, тушь и синий акцент */
+  color-scheme:light dark;
+  --paper:#E4E0D6;      /* фон: чертёжная бумага */
+  --paper-2:#D9D4C8;    /* фон второго плана */
+  --paper-3:#CBC5B7;    /* плашки */
+  --ink:#16181B;        /* основной: тушь */
   --ink-2:#2B2F33;
-  --muted:#5C5E58;      /* вспомогательный текст (AA на бумаге) */
-  --line:#C3BEB1;       /* тонкие линии */
-  --grid:#DCD8CD;       /* миллиметровка */
-  --accent:#FF5B1F;     /* сигнальный оранжевый — только точечно */
+  --muted:#53554F;      /* вспомогательный текст (AA) */
+  --line:#B7B1A3;       /* тонкие линии */
+  --grid:#D3CEC2;       /* миллиметровка */
+  --accent:#2547F5;     /* акцент — только точечно */
+  --on-accent:#FFFFFF;  /* текст на акценте */
+  --inv-bg:#16181B;     /* тёмный лист «Контакты» и подвал */
+  --inv-line:#3A3E42;
   --on-ink:#ECE9E1;
   --on-ink-muted:#A4A399;
 
@@ -95,6 +101,24 @@
   --gutter:20px;
   --pad:20px;
 }
+
+/* тёмная тема — включается по настройке телефона или ПК */
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#131517;
+    --paper-2:#1A1D20;
+    --paper-3:#2A2E33;
+    --ink:#E9E6DE;
+    --ink-2:#C4C1B8;
+    --muted:#9C9D95;
+    --line:#3A3E44;
+    --grid:#1D2023;
+    --accent:#C5F04A;
+    --on-accent:#0E0F12;
+    --inv-bg:#0B0C0E;
+    --inv-line:#2A2D31;
+  }
+}
 @media (min-width:768px){:root{--gutter:24px;--pad:32px}}
 @media (min-width:1280px){:root{--pad:48px}}
 
@@ -114,12 +138,12 @@ p,h1,h2,h3,figure,ol,ul,dl,dd{margin:0}
 ol,ul{padding:0;list-style:none}
 h1,h2,h3{font-family:var(--f-display);line-height:1.05;letter-spacing:-0.015em;font-weight:700}
 section[id]{scroll-margin-top:72px}
-::selection{background:var(--accent);color:var(--ink)}
+::selection{background:var(--accent);color:var(--on-accent)}
 :focus-visible{outline:2px dashed var(--ink);outline-offset:3px}
 .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wrap{width:100%;max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
 
-.skip{position:absolute;left:var(--s-3);top:-60px;z-index:100;background:var(--ink);color:var(--on-ink);padding:var(--s-3) var(--s-4);text-decoration:none;font-weight:600}
+.skip{position:absolute;left:var(--s-3);top:-60px;z-index:100;background:var(--inv-bg);color:var(--on-ink);padding:var(--s-3) var(--s-4);text-decoration:none;font-weight:600}
 .skip:focus{top:var(--s-3)}
 
 /* моно-метка: «Лист 2 / 8», «Поз. 01» */
@@ -139,8 +163,8 @@ section[id]{scroll-margin-top:72px}
 }
 .btn svg{width:20px;height:20px;flex:none}
 .btn:active{transform:translateY(1px)}
-.btn--primary{background:var(--accent);color:var(--ink)}
-.btn--primary:hover{background:var(--ink);color:var(--paper)}
+.btn--primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btn--primary:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .btn--ghost{background:transparent;color:var(--ink)}
 .btn--ghost:hover{background:var(--paper-2)}
 .btn--sm{min-height:44px;padding:0 var(--s-4);font-size:15px}
@@ -148,7 +172,7 @@ section[id]{scroll-margin-top:72px}
 .on-ink .btn--ghost{color:var(--on-ink);border-color:var(--on-ink-muted)}
 .on-ink .btn--ghost:hover{background:var(--ink-2);border-color:var(--on-ink)}
 .on-ink .btn--primary{border-color:var(--accent)}
-.on-ink .btn--primary:hover{background:var(--on-ink);border-color:var(--on-ink);color:var(--ink)}
+.on-ink .btn--primary:hover{background:var(--on-ink);border-color:var(--on-ink);color:var(--inv-bg)}
 .on-ink :focus-visible{outline-color:var(--on-ink)}
 
 .link{color:var(--ink);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px;text-decoration-color:var(--line);transition:text-decoration-color var(--t) var(--ease)}
@@ -221,11 +245,15 @@ section[id]{scroll-margin-top:72px}
 /* «такую же» подчёркнута размерной линией: копия 1:1 */
 .dim{position:relative;display:inline-block;padding-bottom:.18em;color:var(--ink)}
 .dim::before{ /* размерная линия со стрелками */
-  content:"";position:absolute;left:0;right:0;bottom:0;height:12px;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M0 6 12 1v10Z' fill='%23FF5B1F'/%3E%3C/svg%3E") left center/12px 12px no-repeat,
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M12 6 0 1v10Z' fill='%23FF5B1F'/%3E%3C/svg%3E") right center/12px 12px no-repeat,
-    linear-gradient(var(--accent),var(--accent)) center/100% 2px no-repeat;
+  content:"";position:absolute;left:0;right:0;bottom:0;height:12px;background:var(--accent);
+  -webkit-mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M0 6 12 1v10Z'/%3E%3C/svg%3E") left center/12px 12px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M12 6 0 1v10Z'/%3E%3C/svg%3E") right center/12px 12px no-repeat,
+    linear-gradient(#000,#000) center/100% 2px no-repeat;
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M0 6 12 1v10Z'/%3E%3C/svg%3E") left center/12px 12px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M12 6 0 1v10Z'/%3E%3C/svg%3E") right center/12px 12px no-repeat,
+    linear-gradient(#000,#000) center/100% 2px no-repeat;
   transform-origin:center;
 }
 .dim::after{ /* выносные линии */
@@ -299,7 +327,7 @@ section[id]{scroll-margin-top:72px}
 .product__media.is-empty img{display:none}
 .product__pos{display:flex;gap:var(--s-3);flex-wrap:wrap}
 .product__tag{color:var(--ink);background:var(--paper-3);padding:1px 6px}
-.product__tag--hit{background:var(--accent)}
+.product__tag--hit{background:var(--accent);color:var(--on-accent)}
 .product__title{margin-top:var(--s-2);font-size:var(--fs-md);font-weight:600;line-height:1.15;font-stretch:95%}
 .product__text{margin-top:var(--s-3);color:var(--ink-2);max-width:60ch;font-size:16px}
 .product__price b{display:block;font:700 var(--fs-xl)/1 var(--f-display);font-stretch:85%}
@@ -346,7 +374,7 @@ section[id]{scroll-margin-top:72px}
 .shot__frame::after{display:none}
 .shot:hover .shot__frame::before,.shot:focus-within .shot__frame::before{opacity:1;inset:14px}
 .more{grid-column:1 / -1;display:flex;flex-direction:column;justify-content:space-between;gap:var(--s-5);padding:var(--s-5);border:var(--stroke) solid var(--ink);background:var(--paper-2);text-decoration:none;min-height:180px;transition:background-color var(--t) var(--ease)}
-.more:hover{background:var(--accent)}
+.more:hover,.more:hover span.label{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 .more b{display:block;margin-top:var(--s-2);font:700 var(--fs-lg)/1.05 var(--f-display);font-stretch:88%}
 .more span.label{color:var(--ink)}
 .more__go{display:flex;align-items:center;justify-content:space-between;font:500 var(--fs-sm)/1 var(--f-mono)}
@@ -364,7 +392,7 @@ section[id]{scroll-margin-top:72px}
 }
 .reqs__list li::before{content:counter(req) ".";font:500 var(--fs-base)/1.6 var(--f-mono);color:var(--muted)}
 .reqs__list strong{font-weight:600}
-.reqs__list .is-warn::before{color:var(--ink);background:var(--accent);text-align:center;height:1.6em}
+.reqs__list .is-warn::before{color:var(--on-accent);background:var(--accent);text-align:center;height:1.6em}
 .mats{display:grid;grid-template-columns:auto 1fr;gap:2px var(--s-4);margin-top:var(--s-3);font-size:15px}
 .mats dt{font:600 var(--fs-sm)/1.6 var(--f-mono)}
 .mats dd{color:var(--ink-2)}
@@ -430,11 +458,11 @@ section[id]{scroll-margin-top:72px}
   transition:transform var(--t-slow) var(--ease),background-color var(--t) var(--ease);
 }
 .faq summary:hover::after{background-color:var(--paper-2)}
-.faq details[open] summary::after{transform:rotate(45deg);background-color:var(--accent)}
+.faq details[open] summary::after{transform:rotate(45deg);background-color:var(--accent);border-color:var(--accent);background-image:linear-gradient(var(--on-accent),var(--on-accent)),linear-gradient(var(--on-accent),var(--on-accent))}
 .faq details p{padding:0 48px var(--s-5) 0;color:var(--ink-2);max-width:62ch}
 
 /* ---------- Контакты (тёмный лист) ---------- */
-.contacts{background:var(--ink);color:var(--on-ink);padding:var(--s-8) 0 var(--s-6)}
+.contacts{border-top:1px solid var(--inv-line);background:var(--inv-bg);color:var(--on-ink);padding:var(--s-8) 0 var(--s-6)}
 .contacts .label,.contacts .sheet-head .label:last-child{color:var(--on-ink-muted)}
 .contacts .sheet-head .label{color:var(--on-ink)}
 .contacts .sheet-head::after{background:var(--on-ink-muted)}
@@ -449,14 +477,14 @@ section[id]{scroll-margin-top:72px}
 .contacts__big a:hover{border-bottom-color:var(--accent)}
 .contacts__actions{display:flex;flex-direction:column;gap:var(--s-3)}
 .contacts__meta{display:grid;gap:0;border-top:1px solid var(--on-ink-muted)}
-.contacts__meta div{display:grid;grid-template-columns:12ch 1fr;gap:var(--s-4);padding:var(--s-3) 0;border-bottom:1px solid #3A3E42}
+.contacts__meta div{display:grid;grid-template-columns:12ch 1fr;gap:var(--s-4);padding:var(--s-3) 0;border-bottom:1px solid var(--inv-line)}
 .contacts__meta dt{font:500 var(--fs-xs)/1.6 var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--on-ink-muted)}
 .contacts__meta dd a{text-decoration:none}
 .contacts__meta dd a:hover{text-decoration:underline;text-decoration-color:var(--accent)}
 
 /* ---------- Подвал ---------- */
-.footer{background:var(--ink);color:var(--on-ink);padding:0 0 calc(var(--s-6) + 76px + env(safe-area-inset-bottom))}
-.footer__in{display:grid;gap:var(--s-5);padding-top:var(--s-6);border-top:1px solid #3A3E42}
+.footer{background:var(--inv-bg);color:var(--on-ink);padding:0 0 calc(var(--s-6) + 76px + env(safe-area-inset-bottom))}
+.footer__in{display:grid;gap:var(--s-5);padding-top:var(--s-6);border-top:1px solid var(--inv-line)}
 .footer .logo__name span{color:var(--on-ink-muted)}
 .footer__links{display:flex;flex-wrap:wrap;gap:0 var(--s-5)}
 .footer__links a{display:inline-flex;align-items:center;min-height:44px;color:var(--on-ink-muted);text-decoration:none;font-size:15px;transition:color var(--t) var(--ease)}
@@ -471,10 +499,10 @@ section[id]{scroll-margin-top:72px}
 /* ---------- Просмотр фото ---------- */
 .lb{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:rgba(17,19,21,.94);padding:64px 12px 56px}
 .lb.open{display:flex}
-.lb img{max-width:100%;max-height:100%;object-fit:contain;border:1px solid #3A3E42}
+.lb img{max-width:100%;max-height:100%;object-fit:contain;border:1px solid var(--inv-line)}
 .lb-cap{position:absolute;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom));text-align:center;color:var(--on-ink);font:400 var(--fs-sm)/1.4 var(--f-mono);padding:0 64px}
-.lb-btn{position:absolute;width:48px;height:48px;border:1px solid var(--on-ink-muted);border-radius:var(--r-1);background:var(--ink);color:var(--on-ink);font:400 24px/1 var(--f-mono);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color var(--t) var(--ease),color var(--t) var(--ease)}
-.lb-btn:hover{background:var(--accent);color:var(--ink);border-color:var(--accent)}
+.lb-btn{position:absolute;width:48px;height:48px;border:1px solid var(--on-ink-muted);border-radius:var(--r-1);background:var(--inv-bg);color:var(--on-ink);font:400 24px/1 var(--f-mono);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color var(--t) var(--ease),color var(--t) var(--ease)}
+.lb-btn:hover{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 .lb-btn:focus-visible{outline-color:var(--on-ink)}
 .lb-close{top:calc(10px + env(safe-area-inset-top));right:12px}
 .lb-prev{left:12px;top:50%;margin-top:-24px}.lb-next{right:12px;top:50%;margin-top:-24px}
@@ -609,7 +637,7 @@ body.lb-lock{overflow:hidden}
     <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></symbol>
     <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.5 21.5 20h-19Z M12 10v4.5M12 17.2v.1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></symbol>
-    <symbol id="logo" viewBox="0 0 34 34"><path d="M17 2.5 29.6 9.75v14.5L17 31.5 4.4 24.25V9.75Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M11 12.5h12M10 17h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/><path d="M11 21.5h12" fill="none" stroke="#FF5B1F" stroke-width="2.4" stroke-linecap="square"/></symbol>
+    <symbol id="logo" viewBox="0 0 34 34"><path d="M17 2.5 29.6 9.75v14.5L17 31.5 4.4 24.25V9.75Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M11 12.5h12M10 17h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/><path d="M11 21.5h12" fill="none" style="stroke:var(--accent)" stroke-width="2.4" stroke-linecap="square"/></symbol>
   </defs>
 </svg>
 
