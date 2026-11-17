@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Капитал — Polymer</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0c0e11">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Капитал">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{
+  --bg:#0c0e11; --card:#15181d; --card2:#1c2027; --line:#262b33;
+  --tx:#eef1f4; --mut:#8b95a3; --lime:#c6ff3d; --teal:#2fd4c4; --red:#ff5d6c; --amber:#ffbf3d; --pur:#a98bff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body{padding:calc(18px + env(safe-area-inset-top)) 14px 110px;max-width:760px;margin:0 auto}
+button,input,select{font:inherit;color:inherit}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.brand{font-weight:800;letter-spacing:.14em;font-size:13px;color:var(--mut)}
+.brand b{color:var(--lime)}
+.status{font-size:12px;color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:12px}
+.hero{background:radial-gradient(120% 140% at 0% 0%,#1f2a12 0%,#15181d 55%);border-color:#2c3a17}
+.lbl{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}
+.big{font-size:44px;font-weight:800;letter-spacing:-.02em;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.big small{font-size:22px;color:var(--mut);font-weight:700}
+.delta{display:inline-flex;gap:6px;align-items:center;font-size:13px;padding:4px 10px;border-radius:99px;background:#22301a;color:var(--lime);font-weight:600}
+.delta.down{background:#3a1d22;color:var(--red)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.pot{background:var(--card2);border-radius:16px;padding:12px 14px}
+.pot .v{font-size:22px;font-weight:800;margin-top:2px;font-variant-numeric:tabular-nums}
+.pot.k .v{color:var(--lime)} .pot.b .v{color:var(--teal)}
+.pot .s{font-size:11px;color:var(--mut);margin-top:2px}
+.lvl{display:flex;align-items:center;gap:14px}
+.lvl .ico{font-size:38px;width:58px;height:58px;display:grid;place-items:center;background:var(--card2);border-radius:18px;flex:none}
+.lvl .n{font-size:20px;font-weight:800}
+.bar{height:10px;background:var(--card2);border-radius:99px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--lime));border-radius:99px;transition:width .6s}
+.lvlnext{font-size:12px;color:var(--mut);margin-top:6px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:620px){.stats{grid-template-columns:repeat(4,1fr)}}
+.st{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}
+.st .v{font-size:20px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums;word-break:break-word}
+.st .s{font-size:11px;color:var(--mut);margin-top:2px}
+h2{font-size:17px;font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+h2 span{font-size:12px;color:var(--mut);font-weight:500}
+.chart{display:flex;align-items:flex-end;gap:6px;height:150px;padding-top:18px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0}
+.col .bw{flex:1;width:100%;max-width:42px;position:relative}
+.col .b{position:absolute;bottom:0;left:0;right:0;background:#2a3140;border-radius:8px 8px 4px 4px;min-height:3px;transition:height .6s}
+.col.cur .b{background:var(--teal)}
+.col.rec .b{background:var(--lime)}
+.col .t{font-size:10px;color:var(--mut);margin-top:6px;white-space:nowrap}
+.col .val{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--tx);white-space:nowrap}
+.wish{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.wish:first-of-type{border-top:0}
+.wish .m{flex:1;min-width:0}
+.wish .nm{font-weight:700}
+.wish .sub{font-size:12px;color:var(--mut);margin-top:3px}
+.wish .wb{height:6px;background:var(--card2);border-radius:9px;margin-top:8px;overflow:hidden}
+.wish .wb i{display:block;height:100%;background:var(--lime)}
+.wish.done .nm{text-decoration:line-through;color:var(--mut)}
+.pill{font-size:11px;padding:3px 8px;border-radius:99px;background:var(--card2);color:var(--mut);white-space:nowrap}
+.pill.ok{background:#22301a;color:var(--lime)}
+.chk{width:30px;height:30px;border-radius:10px;border:2px solid #3a4250;background:none;flex:none;display:grid;place-items:center;cursor:pointer;font-size:16px}
+.chk.on{background:var(--lime);border-color:var(--lime);color:#111}
+.sale{display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+.sale:first-child{border-top:0}
+.sale .m{flex:1;min-width:0}
+.sale .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sale .sub{font-size:12px;color:var(--mut);margin-top:2px}
+.sale .p{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+.sale .p small{display:block;font-size:11px;color:var(--mut);font-weight:500}
+.x{background:none;border:0;color:#5b6472;font-size:18px;padding:6px;cursor:pointer;border-radius:8px}
+.x.armed{color:#fff;background:var(--red);font-size:12px;padding:6px 8px}
+.task{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.task:first-child{border-top:0}
+.task .m{flex:1}
+.task.done .m{color:var(--mut);text-decoration:line-through}
+.mon{font-size:12px;color:var(--teal);font-weight:700;margin:14px 0 2px;text-transform:capitalize}
+.mon:first-child{margin-top:0}
+.empty{color:var(--mut);font-size:14px;padding:8px 0}
+.more{background:none;border:1px solid var(--line);border-radius:12px;padding:9px;width:100%;margin-top:10px;color:var(--mut);cursor:pointer}
+.fab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));background:var(--lime);color:#101400;border:0;border-radius:99px;padding:16px 28px;font-weight:800;font-size:17px;box-shadow:0 10px 30px rgba(198,255,61,.25);cursor:pointer;z-index:5}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:10}
+.sheet.open{display:flex}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:24px 24px 0 0;width:100%;max-width:560px;padding:20px 18px calc(22px + env(safe-area-inset-bottom));animation:up .22s ease}
+@media(min-width:620px){.sheet{align-items:center}.panel{border-radius:24px}}
+@keyframes up{from{transform:translateY(40px);opacity:.4}}
+.panel h3{font-size:20px;margin-bottom:14px}
+.f{margin-bottom:12px}
+.f label{display:block;font-size:12px;color:var(--mut);margin-bottom:6px}
+.f input,.f select{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font-size:16px;outline:none}
+.f input:focus{border-color:var(--lime)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:8px 13px;font-size:14px;cursor:pointer}
+.chip.on{background:var(--lime);color:#111;border-color:var(--lime);font-weight:700}
+.prev{font-size:13px;color:var(--mut);margin:4px 0 14px}
+.prev b{color:var(--lime)}
+.btns{display:flex;gap:10px}
+.btn{flex:1;border:0;border-radius:14px;padding:15px;font-weight:800;font-size:16px;cursor:pointer}
+.btn.pri{background:var(--lime);color:#111}
+.btn.sec{background:var(--card2)}
+.add{display:flex;gap:8px;margin-top:12px}
+.add input{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:15px;min-width:0}
+.add button{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:0 14px;cursor:pointer;font-weight:700}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--lime);color:#111;font-weight:800;padding:12px 18px;border-radius:14px;transition:transform .3s;z-index:20}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.goal{border-color:#1e3a37;background:linear-gradient(160deg,#122624 0%,#15181d 60%)}
+.goal h2 .gt{font-size:17px;color:var(--tx);font-weight:800}
+.edit{background:none;border:0;color:var(--mut);font-size:12px;text-decoration:underline;cursor:pointer}
+.gnum{font-size:15px;color:var(--mut)}
+.gnum b{font-size:30px;color:var(--tx);font-weight:800;font-variant-numeric:tabular-nums}
+.gb{height:14px;position:relative;overflow:visible}
+.gb i{border-radius:99px}
+.gb.hit i{background:linear-gradient(90deg,var(--lime),#7dff8a)}
+.gb em{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--amber);border-radius:2px;display:none}
+.gline{font-size:13px;margin-top:10px;color:var(--mut);line-height:1.45}
+.gline b{color:var(--tx)}
+.gchips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.gc{background:var(--card2);border-radius:14px;padding:10px 12px}
+.gc .v{font-size:17px;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}
+.gedit{display:none;gap:8px;margin-top:12px}
+.gedit.open{display:flex}
+.gedit input{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px;min-width:0}
+.gedit button{background:var(--lime);color:#111;border:0;border-radius:12px;padding:0 18px;font-weight:800;cursor:pointer}
+.col .gm{position:absolute;left:-3px;right:-3px;height:2px;background:var(--amber);border-radius:2px}
+.col.hit .b{background:#7dff8a}
+.legend{display:flex;gap:14px;font-size:11px;color:var(--mut);margin-top:10px}
+.legend i{display:inline-block;width:10px;height:3px;background:var(--amber);vertical-align:middle;margin-right:5px;border-radius:2px}
+.legend i.g{height:10px;background:#7dff8a;border-radius:3px}
+.code{font-family:ui-monospace,Menlo,monospace;font-size:15px;background:var(--card2);border-radius:12px;padding:12px;margin-top:8px;word-break:break-all;color:var(--lime);user-select:all}
+.note{font-size:12px;color:var(--mut);text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand"><b>КАПИТАЛ</b> · POLYMER</div>
+  <div class="status" id="status">загрузка…</div>
+</div>
+
+<div class="card hero">
+  <div class="lbl">Заработал чистыми · всего</div>
+  <div class="big" id="total">0 ₽</div>
+  <div id="delta"></div>
+  <div class="split">
+    <div class="pot k"><div class="lbl">💰 Копилка 70%</div><div class="v" id="kop">0 ₽</div><div class="s" id="kopS">на свои хотелки</div></div>
+    <div class="pot b"><div class="lbl">🔧 Бизнес 30%</div><div class="v" id="biz">0 ₽</div><div class="s" id="bizS">пластик, техника</div></div>
+  </div>
+</div>
+
+<div class="card goal" id="goalCard">
+  <h2><span class="gt" id="gTitle">Цель месяца</span><button class="edit" id="gEdit">изменить</button></h2>
+  <div class="gnum"><b id="gCur">0 ₽</b> из <span id="gGoal">—</span></div>
+  <div class="bar gb"><i id="gBar" style="width:0"></i><em id="gBonusMark"></em></div>
+  <div class="gline" id="gLine"></div>
+  <div class="gchips">
+    <div class="gc"><div class="lbl">В неделю нужно</div><div class="v" id="gWeek">—</div></div>
+    <div class="gc"><div class="lbl">В день</div><div class="v" id="gDay">—</div></div>
+    <div class="gc"><div class="lbl">🔥 Серия</div><div class="v" id="gStreak">0</div></div>
+  </div>
+  <div class="gedit" id="gEditBox">
+    <input id="gInput" inputmode="numeric" placeholder="Цель на месяц, ₽">
+    <button id="gSave">Ок</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="lvl">
+    <div class="ico" id="lvlIco">🛠</div>
+    <div style="flex:1">
+      <div class="lbl">Уровень империи</div>
+      <div class="n" id="lvlName">Стартап</div>
+    </div>
+  </div>
+  <div class="bar"><i id="lvlBar" style="width:0"></i></div>
+  <div class="lvlnext" id="lvlNext"></div>
+</div>
+
+<div class="stats">
+  <div class="st"><div class="lbl">Этот месяц</div><div class="v" id="sMonth">0 ₽</div><div class="s" id="sMonthS">чистыми</div></div>
+  <div class="st"><div class="lbl">🏆 Рекорд</div><div class="v" id="sRec">—</div><div class="s" id="sRecS">лучший месяц</div></div>
+  <div class="st"><div class="lbl">Продаж</div><div class="v" id="sCnt">0</div><div class="s" id="sAvg">средний чек —</div></div>
+  <div class="st"><div class="lbl">Лучший канал</div><div class="v" id="sCh">—</div><div class="s" id="sChS"></div></div>
+</div>
+
+<div class="card" style="margin-top:12px">
+  <h2>По месяцам <span>чистая прибыль</span></h2>
+  <div class="chart" id="chart"></div>
+  <div class="legend"><span><i></i>цель месяца</span><span><i class="g"></i>цель выполнена</span></div>
+</div>
+
+<div class="card">
+  <h2>Хотелки <span id="pace"></span></h2>
+  <div id="wish"></div>
+  <div class="add">
+    <input id="wName" placeholder="Что хочу" maxlength="60">
+    <input id="wPrice" placeholder="₽" inputmode="numeric" style="max-width:90px">
+    <button id="wAdd">+</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Продажи <span id="salesCnt"></span></h2>
+  <div id="sales"></div>
+</div>
+
+<div class="card">
+  <h2>План по месяцам <span>задачи и цели</span></h2>
+  <div id="tasks"></div>
+  <div class="add">
+    <input id="tText" placeholder="Новая задача на этот месяц" maxlength="120">
+    <button id="tAdd">+</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Синхронизация <span>айфон ⇄ ПК</span></h2>
+  <div id="syncOff">
+    <div class="gline" style="margin-top:0">Сейчас всё хранится только на этом устройстве. Чтобы видеть то же самое на компе — создай код здесь и введи его на другом устройстве.</div>
+    <div class="btns" style="margin-top:12px"><button class="btn pri" id="syncNew">Создать код</button></div>
+    <div class="add"><input id="syncInput" placeholder="или вставь код с другого устройства" autocapitalize="off" autocorrect="off"><button id="syncJoin">Ок</button></div>
+  </div>
+  <div id="syncOn" style="display:none">
+    <div class="gline" style="margin-top:0">Код синхронизации — введи его на втором устройстве:</div>
+    <div class="code" id="syncCode"></div>
+    <div class="btns" style="margin-top:10px"><button class="btn sec" id="syncCopy">Скопировать</button><button class="btn sec" id="syncStop">отключить</button></div>
+    <div class="gline">Код никому не показывай — с ним можно смотреть твои цифры.</div>
+  </div>
+  <div class="btns" style="margin-top:14px"><button class="btn sec" id="expBtn" style="font-size:14px">⬇ Бэкап</button><label class="btn sec" style="font-size:14px;text-align:center">⬆ Восстановить<input type="file" id="impFile" accept="application/json,.json" hidden></label></div>
+</div>
+
+<button class="fab" id="fab">＋ Продажа</button>
+
+<div class="sheet" id="sheet">
+  <div class="panel">
+    <h3>Новая продажа 💸</h3>
+    <div class="f"><label>Что продал</label><input id="iWhat" placeholder="Держатели АКБ Makita ×3" maxlength="80"></div>
+    <div class="row2">
+      <div class="f"><label>Получил, ₽</label><input id="iPrice" inputmode="numeric" placeholder="900"></div>
+      <div class="f"><label>Потратил на печать, ₽</label><input id="iCost" inputmode="numeric" placeholder="200"></div>
+    </div>
+    <div class="f"><label>Откуда клиент</label><div class="chips" id="iCh"></div></div>
+    <div class="f"><label>Дата</label><input id="iDate" type="date"></div>
+    <div class="prev" id="iPrev">Чистыми: <b>0 ₽</b></div>
+    <div class="btns"><button class="btn sec" id="iCancel">Отмена</button><button class="btn pri" id="iSave">Сохранить</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+const CH=["Авито","Telegram","Сайт","Яндекс Карты","Знакомые","Другое"];
+const LV=[[0,"🛠","Стартап"],[10000,"🔩","Мастерская"],[30000,"🏭","Цех"],[75000,"⚙️","Фабрика"],[150000,"🏗","Завод"],[300000,"🏢","Корпорация"],[600000,"👑","Империя"],[1000000,"🚀","Монополист Челнов"],[2500000,"🌍","Мировой бренд"]];
+const MON=["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"];
+const MONF=["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"];
+const $=id=>document.getElementById(id);
+const rub=n=>Math.round(n).toLocaleString("ru-RU").replace(/,/g," ")+" ₽";
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const num=v=>{const n=parseFloat(String(v||"").replace(/\s/g,"").replace(",","."));return isFinite(n)?n:0};
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+
+let S;
+// реальные цели по чистой прибыли: старт небольшой, рост с X2D, пики на праздниках, май 2028 — экзамены
+const DEF={"2026-11":4000,"2026-12":10000,"2027-01":7000,"2027-02":9000,"2027-03":11000,"2027-04":10000,"2027-05":12000,"2027-06":13000,"2027-07":13000,"2027-08":15000,"2027-09":15000,"2027-10":16000,"2027-11":18000,"2027-12":25000,"2028-01":17000,"2028-02":20000,"2028-03":22000,"2028-04":20000,"2028-05":10000,"2028-06":12000,"2028-07":20000,"2028-08":15000};
+const mkey=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+function goalFor(m){const o=S.goals[m];if(o!=null&&num(o)>0)return num(o);if(DEF[m])return DEF[m];const ks=Object.keys(DEF).sort();if(m<ks[0])return 0;return DEF[ks[ks.length-1]]}
+let showAll=false, ch="Авито";
+
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1800)}
+function armed(btn,fn){ if(btn.classList.contains("armed")){btn.classList.remove("armed");btn.textContent=btn.dataset.o||"×";fn();return} btn.dataset.o=btn.textContent;btn.classList.add("armed");btn.textContent="точно?";setTimeout(()=>{if(btn.classList.contains("armed")){btn.classList.remove("armed");btn.textContent=btn.dataset.o}},2500)}
+
+function calc(){
+  const sales=S.sales.map(d=>{const p=num(d.price),c=num(d.cost),pr=p-c;const biz=Math.round(pr*0.3);return {...d,pr,biz,kop:pr-biz}});
+  const total=sales.reduce((a,s)=>a+s.pr,0);
+  const kopIn=sales.reduce((a,s)=>a+s.kop,0), bizIn=sales.reduce((a,s)=>a+s.biz,0);
+  const spentK=S.buys.filter(b=>b.done&&b.from==="kop").reduce((a,b)=>a+num(b.price),0);
+  const spentB=S.buys.filter(b=>b.done&&b.from==="biz").reduce((a,b)=>a+num(b.price),0);
+  const byM={}; sales.forEach(s=>{const m=String(s.date||"").slice(0,7); if(m) byM[m]=(byM[m]||0)+s.pr});
+  const now=new Date(), cm=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");
+  const pd=new Date(now.getFullYear(),now.getMonth()-1,1), pm=pd.getFullYear()+"-"+String(pd.getMonth()+1).padStart(2,"0");
+  const cut=new Date(now-28*864e5).toISOString().slice(0,10);
+  const last28=sales.filter(s=>s.date>=cut).reduce((a,s)=>a+s.kop,0);
+  return {sales,total,kopIn,bizIn,kop:kopIn-spentK,biz:bizIn-spentB,spentK,spentB,byM,cm,pm,weekKop:last28/4};
+}
+
+function render(){
+  const C=calc();
+  $("total").textContent=rub(C.total);
+  $("kop").textContent=rub(C.kop); $("biz").textContent=rub(C.biz);
+  $("kopS").textContent=C.spentK?("потрачено "+rub(C.spentK)):"на свои хотелки";
+  $("bizS").textContent=C.spentB?("вложено "+rub(C.spentB)):"пластик, техника";
+  const cur=C.byM[C.cm]||0, prev=C.byM[C.pm]||0;
+  let dh="";
+  if(prev>0){const p=Math.round((cur-prev)/prev*100);dh=`<span class="delta ${p<0?"down":""}">${p>=0?"▲":"▼"} ${Math.abs(p)}% к прошлому месяцу</span>`}
+  else if(cur>0) dh=`<span class="delta">▲ ${rub(cur)} в этом месяце</span>`;
+  else dh=`<span class="delta">Жми «＋ Продажа» после каждого заказа</span>`;
+  $("delta").innerHTML=dh;
+  // goal of month
+  {
+    const now=new Date(), G=goalFor(C.cm), bonus=Math.round(G*1.5/500)*500;
+    const dim=new Date(now.getFullYear(),now.getMonth()+1,0).getDate(), daysLeft=dim-now.getDate()+1;
+    $("gTitle").textContent="Цель на "+MONF[now.getMonth()];
+    $("gCur").textContent=rub(cur); $("gGoal").textContent=G?rub(G):"—";
+    const scale=Math.max(bonus,1);
+    $("gBar").style.width=Math.min(100,cur/scale*100)+"%";
+    const mk=$("gBonusMark"); if(G){mk.style.display="block";mk.style.left=(G/scale*100)+"%"}
+    $("gBar").parentElement.classList.toggle("hit",G>0&&cur>=G);
+    const left=Math.max(0,G-cur);
+    let line;
+    if(!G) line="Цели на этот месяц нет — нажми «изменить».";
+    else if(cur>=bonus) line="🏆 <b>Бонус-цель взята!</b> Месяц разнесён, всё дальше — сверху.";
+    else if(cur>=G) line=`✅ <b>Цель взята!</b> Дальше бонус-цель ${rub(bonus)} — ещё ${rub(bonus-cur)}.`;
+    else line=`Осталось <b>${rub(left)}</b> за ${daysLeft} дн. Жёлтая черта — цель, полная полоса — бонус ${rub(bonus)}.`;
+    $("gLine").innerHTML=line;
+    $("gWeek").textContent=left>0?rub(left/Math.max(1,daysLeft/7)):"✓";
+    $("gDay").textContent=left>0?rub(left/daysLeft):"✓";
+    let st=0; const d=new Date(now.getFullYear(),now.getMonth(),1);
+    if((C.byM[C.cm]||0)>=G&&G>0) st++;
+    for(let k=1;k<36;k++){const dd=new Date(d.getFullYear(),d.getMonth()-k,1),key=mkey(dd),g=goalFor(key);if(!g||(C.byM[key]||0)<g)break;st++}
+    $("gStreak").textContent=st+" мес";
+  }
+  // level
+  let i=0; while(i+1<LV.length&&C.total>=LV[i+1][0]) i++;
+  $("lvlIco").textContent=LV[i][1]; $("lvlName").textContent=LV[i][2];
+  if(i+1<LV.length){const a=LV[i][0],b=LV[i+1][0];$("lvlBar").style.width=Math.max(2,(C.total-a)/(b-a)*100)+"%";$("lvlNext").textContent=`До «${LV[i+1][2]}» ${LV[i+1][1]} — ещё ${rub(b-C.total)}`}
+  else{$("lvlBar").style.width="100%";$("lvlNext").textContent="Максимальный уровень. Легенда."}
+  // stats
+  $("sMonth").textContent=rub(cur);
+  $("sMonthS").textContent=MONF[new Date().getMonth()]+" · чистыми";
+  const ms=Object.entries(C.byM).sort((a,b)=>b[1]-a[1]);
+  if(ms.length){const [m,v]=ms[0];$("sRec").textContent=rub(v);$("sRecS").textContent=MONF[+m.slice(5)-1]+" "+m.slice(0,4)+(m===C.cm?" · сейчас 🔥":"")}else{$("sRec").textContent="—";$("sRecS").textContent="лучший месяц"}
+  $("sCnt").textContent=C.sales.length;
+  $("sAvg").textContent=C.sales.length?("средний чек "+rub(C.sales.reduce((a,s)=>a+num(s.price),0)/C.sales.length)):"средний чек —";
+  const bc={}; C.sales.forEach(s=>{bc[s.ch||"Другое"]=(bc[s.ch||"Другое"]||0)+s.pr});
+  const top=Object.entries(bc).sort((a,b)=>b[1]-a[1])[0];
+  $("sCh").textContent=top?top[0]:"—"; $("sChS").textContent=top?rub(top[1])+" чистыми":"";
+  // chart: last 8 months
+  const now=new Date(); const arr=[];
+  for(let k=7;k>=0;k--){const d=new Date(now.getFullYear(),now.getMonth()-k,1);const key=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");arr.push([key,C.byM[key]||0,MON[d.getMonth()]])}
+  const mx=Math.max(1,...arr.map(a=>Math.max(a[1],goalFor(a[0])))), rec=ms.length?ms[0][0]:null;
+  $("chart").innerHTML=arr.map(([k,v,l])=>{const g=goalFor(k);const hit=g>0&&v>=g;
+    return `<div class="col ${k===rec&&v>0?"rec":""} ${k===C.cm?"cur":""} ${hit?"hit":""}"><div class="bw"><div class="b" style="height:${Math.max(2,v/mx*100)}%">${v>0?`<span class="val">${v>=1000?Math.round(v/100)/10+"к":Math.round(v)}</span>`:""}</div>${g?`<div class="gm" style="bottom:${g/mx*100}%"></div>`:""}</div><div class="t">${l}</div></div>`}).join("");
+  // wish
+  $("pace").textContent=C.weekKop>0?("темп ≈ "+rub(C.weekKop)+"/нед"):"";
+  const wl=[...S.buys].sort((a,b)=>(a.done-b.done)||((a.order||0)-(b.order||0)));
+  let pool=C.kop;
+  $("wish").innerHTML=wl.length?wl.map(b=>{
+    const price=num(b.price); let sub="", pill="";
+    if(b.from==="gift"){sub="🎁 подарок"; pill=b.done?'<span class="pill ok">есть</span>':'<span class="pill">ждём</span>'}
+    else if(b.done){sub=(b.from==="biz"?"из бизнеса":"из копилки")+(price?" · "+rub(price):""); pill='<span class="pill ok">куплено</span>'}
+    else if(!price){sub=(b.from==="biz"?"из бизнеса":"из копилки")+" · цену впиши, когда узнаешь"}
+    else{
+      const have=b.from==="biz"?C.biz:pool; const left=Math.max(0,price-have);
+      const pct=Math.min(100,Math.max(0,have/price*100));
+      if(b.from!=="biz") pool=Math.max(0,pool-price);
+      if(left<=0){pill='<span class="pill ok">✅ хватает</span>';sub=rub(price)+" · можно брать"}
+      else{const pace=b.from==="biz"?C.weekKop*3/7:C.weekKop; sub=rub(price)+" · ещё "+rub(left)+(pace>0?" · ≈ "+Math.ceil(left/pace)+" нед":"")}
+      sub+=`</div><div class="wb"><i style="width:${pct}%"></i>`;
+    }
+    return `<div class="wish ${b.done?"done":""}"><button class="chk ${b.done?"on":""}" data-buy="${esc(b.id)}" title="куплено">${b.done?"✓":""}</button><div class="m"><div class="nm">${esc(b.name)}</div><div class="sub">${sub}</div></div>${pill}<button class="x" data-delbuy="${esc(b.id)}">×</button></div>`;
+  }).join(""):'<div class="empty">Добавь, что хочешь купить</div>';
+  // sales list
+  const sl=[...C.sales].sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(b.created||0)-(a.created||0));
+  $("salesCnt").textContent=sl.length?sl.length+" шт":"";
+  const shown=showAll?sl:sl.slice(0,8);
+  $("sales").innerHTML=sl.length?shown.map(s=>{const d=String(s.date||"");const dd=d?d.slice(8,10)+"."+d.slice(5,7):"";
+    return `<div class="sale"><div class="m"><div class="nm">${esc(s.what||"Заказ")}</div><div class="sub">${dd} · ${esc(s.ch||"")} · ${rub(num(s.price))}</div></div><div class="p">+${rub(s.pr)}<small>в копилку ${rub(s.kop)}</small></div><button class="x" data-delsale="${esc(s.id)}">×</button></div>`}).join("")+(sl.length>8?`<button class="more" id="more">${showAll?"Свернуть":"Показать все ("+sl.length+")"}</button>`:""):'<div class="empty">Пока пусто. Первая продажа — кнопка внизу 👇</div>';
+  // tasks
+  const tl=[...S.tasks].sort((a,b)=>String(a.month).localeCompare(String(b.month))||(a.order||0)-(b.order||0));
+  let html="",lm=null;
+  tl.forEach(t=>{if(t.month!==lm){lm=t.month;const m=String(t.month);const g=goalFor(m),f=C.byM[m]||0;html+=`<div class="mon">${MONF[+m.slice(5)-1]||""} ${m.slice(0,4)}${m===C.cm?" · сейчас":""}${g?` <span style="color:var(--mut);font-weight:500;text-transform:none">· цель ${rub(g)}${f>=g?" ✅":""}</span>`:""}</div>`}
+    html+=`<div class="task ${t.done?"done":""}"><button class="chk ${t.done?"on":""}" data-task="${esc(t.id)}">${t.done?"✓":""}</button><div class="m">${esc(t.text)}</div><button class="x" data-deltask="${esc(t.id)}">×</button></div>`});
+  $("tasks").innerHTML=html||'<div class="empty">Задач нет</div>';
+}
+
+// ---- data ----
+const KEY="kapital_v1";
+const SEED_BUYS=[["🧵 Пластик PETG/PLA запасом",15000,"biz"],["📷 Creality Pika (3D-сканер)",50000,"kop"],["🎮 PS5 б/у",47000,"kop"],["🚗 GTA 6",7000,"kop"],["🖨 Bambu Lab X2D Combo",0,"gift"],["🖨 3-й принтер P1S / P2S",0,"biz"]];
+const SEED_TASKS=[["2026-11","Домен polymer-3d.ru и сайт на нём"],["2026-11","3 новые карточки на Авито"],["2026-11","Напечатать визитки"],["2026-12","Новогодние подарки и брелоки"],["2026-12","Оформить самозанятость (с согласием родителей)"],["2026-12","Запустить X2D от бати"],["2027-01","Каталог автомелочей"],["2027-01","Собрать отзывы на Яндекс Картах"],["2027-01","Первые Шортсы про печать"],["2027-02","Подарки к 23 февраля"],["2027-02","Обойти мастерские и автосервисы"],["2027-03","Купить Pika и запустить услугу 3D-скана"],["2027-03","Подарки к 8 марта"],["2027-04","Оптовые заказы, решить про 3-й принтер"],["2027-05","Сувениры к выпускным"],["2027-06","PS5 + GTA 6 🎮"],["2027-07","Масштаб: Озон, постоянные клиенты"],["2027-08","Школьный сезон: органайзеры, подставки, подарки учителям"],["2027-09","Проверить, какие товары продаются лучше всего, и выкинуть слабые"],["2027-10","Выйти на Озон / WB с 2–3 хитами"],["2027-12","Новый год — самый денежный месяц, готовиться с ноября"],["2028-05","Экзамены — заказы на минимум, главное поступить"],["2028-07","Подготовить переезд принтеров и предупредить постоянных клиентов"],["2028-08","Переезд в Казань/Москву вместе с принтерами — продолжать там"]];
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function load(){
+  let d=null; try{d=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){}
+  if(!d||typeof d!=="object"){d={sales:[],buys:SEED_BUYS.map((b,i)=>({id:uid()+i,name:b[0],price:b[1],from:b[2],done:false,order:i})),tasks:SEED_TASKS.map((t,i)=>({id:uid()+i,month:t[0],text:t[1],done:false,order:i})),goals:{},updated:0,sync:null}}
+  ["sales","buys","tasks"].forEach(k=>{if(!Array.isArray(d[k]))d[k]=[]}); if(!d.goals||typeof d.goals!=="object")d.goals={};
+  return d;
+}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast("Не сохранилось")}}
+function commit(msg){S.updated=Date.now();persist();render();if(msg)toast(msg);pushLater()}
+// --- синхронизация между устройствами (jsonblob.com, по коду) ---
+const API="https://jsonblob.com/api/jsonBlob";
+let pushT=null;
+function payload(){const {sync,...rest}=S;return rest}
+function pushLater(){if(!S.sync)return;clearTimeout(pushT);pushT=setTimeout(push,800)}
+async function push(){
+  if(!S.sync)return;
+  try{const r=await fetch(API+"/"+S.sync,{method:"PUT",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload())});
+    setStatus(r.ok?"● синхронизировано":"⚠ синхронизация не прошла")}catch(e){setStatus("офлайн · сохранено на телефоне")}
+}
+async function pull(){
+  if(!S.sync)return;
+  try{const r=await fetch(API+"/"+S.sync,{headers:{"Accept":"application/json"}});
+    if(!r.ok){setStatus("⚠ код синхронизации не найден");return}
+    const d=await r.json();
+    if(d&&typeof d==="object"&&(d.updated||0)>(S.updated||0)){const sync=S.sync;S=Object.assign(load.call(null),d,{sync});persist();render()}
+    else if((S.updated||0)>(d.updated||0)) await push();
+    setStatus("● синхронизировано");
+  }catch(e){setStatus("офлайн · сохранено на устройстве")}
+}
+async function createSync(){
+  setStatus("создаю код…");
+  try{const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload())});
+    if(!r.ok) throw 0;
+    const loc=r.headers.get("Location")||r.headers.get("location")||"";const id=loc.split("/").pop()||r.headers.get("X-jsonblob")||"";
+    if(!id) throw 0;
+    S.sync=id;persist();renderSync();setStatus("● синхронизировано");toast("Код создан");
+  }catch(e){setStatus("⚠ не получилось");toast("Не получилось, проверь интернет")}
+}
+function setStatus(t){$("status").textContent=t}
+function renderSync(){
+  const on=!!S.sync;
+  $("syncOff").style.display=on?"none":"block";$("syncOn").style.display=on?"block":"none";
+  if(on)$("syncCode").textContent=S.sync;
+}
+function find(arr,id){return arr.find(x=>x.id===id)}
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button"); if(!t) return;
+  if(t.dataset.buy){const b=find(S.buys,t.dataset.buy); if(b){b.done=!b.done;commit(b.done?"Поздравляю с покупкой 🎉":null)}}
+  else if(t.dataset.task){const k=find(S.tasks,t.dataset.task); if(k){k.done=!k.done;commit(k.done?"Красава 💪":null)}}
+  else if(t.dataset.delsale){armed(t,()=>{S.sales=S.sales.filter(x=>x.id!==t.dataset.delsale);commit("Удалено")})}
+  else if(t.dataset.delbuy){armed(t,()=>{S.buys=S.buys.filter(x=>x.id!==t.dataset.delbuy);commit("Удалено")})}
+  else if(t.dataset.deltask){armed(t,()=>{S.tasks=S.tasks.filter(x=>x.id!==t.dataset.deltask);commit("Удалено")})}
+  else if(t.id==="more"){showAll=!showAll;render()}
+});
+
+// sale sheet
+function chips(){ $("iCh").innerHTML=CH.map(c=>`<span class="chip ${c===ch?"on":""}" data-ch="${c}">${c}</span>`).join("") }
+$("iCh").addEventListener("click",e=>{const c=e.target.closest("[data-ch]");if(c){ch=c.dataset.ch;chips()}});
+function prev(){const pr=num($("iPrice").value)-num($("iCost").value);const kop=pr-Math.round(pr*0.3);$("iPrev").innerHTML=`Чистыми: <b>${rub(pr)}</b> · в копилку ${rub(kop)} · в бизнес ${rub(pr-kop)}`}
+["iPrice","iCost"].forEach(id=>$(id).addEventListener("input",prev));
+$("fab").onclick=()=>{$("iWhat").value="";$("iPrice").value="";$("iCost").value="";$("iDate").value=today();chips();prev();$("sheet").classList.add("open");setTimeout(()=>$("iWhat").focus(),150)};
+$("iCancel").onclick=()=>$("sheet").classList.remove("open");
+$("sheet").addEventListener("click",e=>{if(e.target.id==="sheet")$("sheet").classList.remove("open")});
+let saving=false;
+$("iSave").onclick=async()=>{
+  if(saving) return;
+  const price=num($("iPrice").value); if(price<=0){$("iPrice").focus();toast("Впиши сумму");return}
+  saving=true;
+  const data={what:$("iWhat").value.trim()||"Заказ",price,cost:num($("iCost").value),ch,date:$("iDate").value||today(),created:Date.now()};
+  $("sheet").classList.remove("open");
+  S.sales.push({id:uid(),...data});commit("+"+rub(price-data.cost)+" 🔥");
+  saving=false;
+};
+$("wAdd").onclick=()=>{const n=$("wName").value.trim();if(!n)return;const p=num($("wPrice").value);
+  S.buys.push({id:uid(),name:n,price:p,from:"kop",done:false,order:Date.now()});commit("Добавлено");$("wName").value="";$("wPrice").value=""};
+$("tAdd").onclick=()=>{const n=$("tText").value.trim();if(!n)return;const d=new Date();
+  S.tasks.push({id:uid(),text:n,month:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"),done:false,order:Date.now()});commit("Добавлено");$("tText").value=""};
+
+$("gEdit").onclick=()=>{const b=$("gEditBox");b.classList.toggle("open");if(b.classList.contains("open")){$("gInput").value=goalFor(mkey(new Date()))||"";$("gInput").focus()}};
+$("gSave").onclick=()=>{const v=Math.round(num($("gInput").value));if(v<=0){toast("Впиши сумму");return}
+  S.goals={...S.goals,[mkey(new Date())]:v};$("gEditBox").classList.remove("open");commit("Цель обновлена")};
+
+S=load();
+$("syncNew").onclick=createSync;
+$("syncJoin").onclick=async()=>{const c=$("syncInput").value.trim().replace(/[^A-Za-z0-9-]/g,"");if(!c){toast("Вставь код");return}
+  S.sync=c;S.updated=0;persist();renderSync();await pull();};
+$("syncCopy").onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(S.sync).then(()=>toast("Код скопирован"))};
+$("syncStop").onclick=e=>armed(e.target,()=>{S.sync=null;persist();renderSync();setStatus("только на этом устройстве");$("syncStop").textContent="отключить"});
+$("expBtn").onclick=()=>{const b=new Blob([JSON.stringify(payload(),null,1)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="kapital-backup.json";a.click()};
+$("impFile").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());const sync=S.sync;S=Object.assign(load(),d,{sync});commit("Восстановлено")}catch(err){toast("Не тот файл")}};
+renderSync(); render();
+setStatus(S.sync?"синхронизация…":"сохранено на этом устройстве");
+pull();
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)pull()});
+})();
+</script>
+</body>
+</html>

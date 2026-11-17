@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
+Disallow: /kapital/
 Sitemap: https://marazmota.github.io/sitemap.xml
