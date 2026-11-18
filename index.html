@@ -265,7 +265,8 @@ section[id]{scroll-margin-top:72px}
   font:500 var(--fs-sm)/1 var(--f-mono);letter-spacing:.04em;color:var(--ink);background:var(--paper);padding:2px 4px;
 }
 .hero__lead{margin-top:var(--s-7);max-width:34ch;font-size:var(--fs-md);line-height:1.4;color:var(--ink-2)}
-.hero__actions{display:flex;flex-direction:column;gap:var(--s-3);margin-top:var(--s-6)}
+/* на телефоне кнопки не дублируем: снизу всегда есть панель Telegram + звонок */
+.hero__actions{display:none;gap:var(--s-3);margin-top:var(--s-6)}
 
 .hero__figure{position:relative;margin-top:var(--s-7);border:var(--stroke) solid var(--ink);background:var(--paper-2)}
 .hero__figure img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover}
@@ -523,6 +524,7 @@ body.lb-lock{overflow:hidden}
 @media (min-width:768px){
   .footer{padding-bottom:var(--s-6)}
   .sticky-bar{display:none}
+  .hero__actions{display:flex}
   .header__tg{display:inline-flex}
   .hero{padding:var(--s-6) 0 var(--s-8)}
   .sheet{border:var(--stroke) solid var(--ink);padding:0 var(--s-6) 0 var(--s-7)}
